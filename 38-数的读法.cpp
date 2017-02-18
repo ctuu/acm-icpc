@@ -45,7 +45,7 @@ int speak(int a, int b)
 
     if (c >= 1000)
     {
-            std::cout << v1[c / 1000 - 1];
+        std::cout << v1[c / 1000 - 1];
         c -= b / 1000 * 1000;
         d = c;
         std::cout << "qian ";
