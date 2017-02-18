@@ -1,27 +1,17 @@
 #include <iostream>
-
+bool primnum[100001] = {0};
 int main()
 {
-    long long num, temp;
-    int on, tw, th, ct;
-    on = tw = th = -1;
-    std::cin >> num;
-    for (ct = 1, temp = num; temp > 10; ++ct)
-        temp /= 10;
-            th = num;
-    std::cout<<ct<<std::endl;
-    if (ct >= 5)
+    int i, j;
+    for (i = 2; i < 5001; i++)
     {
-        tw = num / 10000;
-        th -= tw * 10000;
+        if (primnum[i] == 1)
+            continue;
+        for (j = 2 * i; j < 15000; j += i)
+            primnum[j] = 1;
     }
-    if (ct >= 9)
-    {
-        on = num / 100000000;
-        tw -= on * 10000;
-    }
-    std::cout<<on<<std::endl;
-    std::cout<<tw<<std::endl;
-    std::cout<<th<<std::endl;
+    for (i = 0; i < 1001; ++i)
+        if (!primnum[i])
+            std::cout << i << "  ";
     return 0;
 }
