@@ -31,23 +31,23 @@ int main()
         end = ch + n - 1;
         for (i = 0; i < n / 2; ++i, ++be)
         {
-            if (*be == oddch)
-                for (temp = i; temp < n / 2; ++temp)
+            if (*be == oddch && *be != ch[n - i - 1])
+                for (--be, temp = i; temp < n / 2; ++temp)
                     swap(&ch[temp], &ch[temp + 1]);
             else
             {
                 for (temp = 0; *be != *end; ++temp)
                     --end;
-                tch = *end;
-                std::cout << tch << std::endl;
                 for (; temp > 0; --temp, ++end)
                     swap(end, end + 1);
+                --end;
+                for (temp = 0; temp < n; ++temp)
+                    std::cout << ch[temp];
+                std::cout << std::endl;
             }
         }
+        std::cout << tot;
     }
-    for (i = 0; i < n; ++i)
-        std::cout << ch[i];
-    std::cout << tot;
     return 0;
 }
 
