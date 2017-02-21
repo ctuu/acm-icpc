@@ -1,3 +1,6 @@
+// 9
+// ffdejjell
+
 #include <iostream>
 #define MAXCH 8001
 void swap(char *a, char *b);
