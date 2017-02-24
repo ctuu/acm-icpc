@@ -1,3 +1,5 @@
+//7 10
+//252
 #include <iostream>
 int main()
 {
