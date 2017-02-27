@@ -6,6 +6,7 @@ int main()
     std::cin >> n >> m;
     pass[0][0] = 1;
     for (i = 0; i <= m; ++i)
+    {
 	for (j = 0; j < n; ++j)
 	    if (pass[i][j] > 0)
 	    {
@@ -18,6 +19,7 @@ int main()
 		else
 		    pass[i + 1][j - 1] += pass[i][j];
 	    }
+    }
     std::cout << pass[m][0] << std::endl;
     return 0;
 }
