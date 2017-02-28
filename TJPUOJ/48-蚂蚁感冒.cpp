@@ -1,7 +1,7 @@
 #include <iostream>
 int main()
 {
-    int n, i, sick = 0, one;
+    int n, i, sick = 1, one;
     int num[52];
     std::cin >> n;
     for (i = 0; i < n; ++i)
@@ -20,20 +20,10 @@ int main()
         {
             if (num[i] > 0 && num[i] < -one)
                 ++sick;
-                if (num[i] < 0 && num[i] < one)
+            if (num[i] < 0 && num[i] < one)
                 ++sick;
         }
     }
-    // for (i = 1; sick > 0 && i < n; ++i)
-    // {
-    //     if (one > 0)
-    //     {
-    //     }
-    //     else
-    //     {
-            
-    //     }
-    // }
     std::cout << sick;
     return 0;
 }

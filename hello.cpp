@@ -1,6 +1,8 @@
 #include <iostream>  
 int main()  
 {  
-    std::cout << "asdf" << '\r' <<"qwe";
+    bool n = 1;
+    n = !n;
+    std::cout << n;
     return 0;  
 }  
