@@ -1,8 +1,10 @@
-#include <iostream>  
-int main()  
-{  
-    bool n = 1;
-    n = !n;
-    std::cout << n;
-    return 0;  
-}  
+#include <iostream>
+int main()
+{
+    int n = 210;
+    int te,temp;
+    temp = te = n;
+    if ( (te = temp / 4 * 4) == temp)
+    std::cout << n/4*4;
+    return 0;
+}
