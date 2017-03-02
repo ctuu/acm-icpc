@@ -1,14 +1,14 @@
 #include <iostream>
-#define NU 10
+#define NU 8
 int main()
 {
     int i, j, n, temp = n;
-    int co[NU] = {0};
+    int co[8] = {0};
     std::cin >> n;
-    for (i = 2; i < NU; ++i)
+    for (i = 0; i < NU; ++i)
     {
         temp = n;
-        for (j = i; temp >=1; temp /= j, ++j)
+        for (j = i+2; temp >=1; temp /= j, ++j)
             if (temp / j * j == temp)
                 ++co[i];
             else
@@ -20,9 +20,9 @@ int main()
         std::cout << "1\n" <<n;
     else
     {
-        std::cout << co[temp] << '\n' << temp;
+        std::cout << co[temp] << '\n' << temp+2;
         --co[temp];
-        for (i = temp +1 ; co[temp]; ++i, --co[temp])
+        for (i = temp +3 ; co[temp]; ++i, --co[temp])
             std::cout << "*" << i;
     }
     return 0;
