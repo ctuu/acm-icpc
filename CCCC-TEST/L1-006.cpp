@@ -1,24 +1,29 @@
 #include <iostream>
-#define NUM 8
+#define NU 10
 int main()
 {
-    int maxn[NUM] = {0};
-    int i, j, n, temp, te;
+    int i, j, n, temp = n;
+    int co[NU] = {0};
     std::cin >> n;
-    for (i = 0; i < NUM; ++i)
-        for (temp = n, j = i + 2; temp != 0 && (te = temp / j * j) == temp; temp /= j, ++j)
-            ++maxn[i];
-    for (n = maxn[0], i = 1; i < NUM; ++i)
-        n = (n > maxn[i]) ? n : maxn[i];
-    std::cout << n << "!" << maxn[n];
-    for (i = 0; i < NUM; ++i)
-        if (i == n)
-        {
-            --maxn[i];
-            std::cout << i++;
-            for (j = i; maxn[i] > 0; --maxn[i], ++j)
-                std::cout << "*" << j;
-            break;
-        }
+    for (i = 2; i < NU; ++i)
+    {
+        temp = n;
+        for (j = i; temp >=1; temp /= j, ++j)
+            if (temp / j * j == temp)
+                ++co[i];
+            else
+                break;
+    }
+    for (temp = 0, i = 0; i < NU; ++i)
+        temp = (co[temp] >= co[i]) ? temp : i;
+    if (co[temp] == 0)
+        std::cout << "1\n" <<n;
+    else
+    {
+        std::cout << co[temp] << '\n' << temp;
+        --co[temp];
+        for (i = temp +1 ; co[temp]; ++i, --co[temp])
+            std::cout << "*" << i;
+    }
     return 0;
 }
