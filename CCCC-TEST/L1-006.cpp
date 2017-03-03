@@ -1,9 +1,9 @@
 #include <iostream>
-#define NU 8
+#define NU 300
 int main()
 {
     int i, j, n, temp = n;
-    int co[8] = {0};
+    int co[NU] = {0};
     std::cin >> n;
     for (i = 0; i < NU; ++i)
     {
