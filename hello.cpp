@@ -2,7 +2,8 @@
 #include <iomanip>
 int main()
 {
-    int n = 3;
-    std::cout << std::setw(5) << n;
+    int n;
+    // std::cin >> n;
+    std::cout << 37 %13;
     return 0;
 }

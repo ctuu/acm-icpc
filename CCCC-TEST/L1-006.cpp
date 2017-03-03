@@ -22,7 +22,7 @@ int main()
     {
         std::cout << co[temp] << '\n' << temp+2;
         --co[temp];
-        for (i = temp +3 ; co[temp]; ++i, --co[temp])
+        for (i = temp +3; co[temp]; ++i, --co[temp])
             std::cout << "*" << i;
     }
     return 0;
