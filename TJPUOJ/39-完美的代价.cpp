@@ -25,7 +25,7 @@ int main()
             {
                 // fdejjellf
                 int j = i;
-                for (; j <= n -i - 1; ++j)
+                for (; j <= n - i - 1; ++j)
                     if (ch[j] == ch[n - 1 - i])
                         break;
                 change += j - i;
@@ -36,7 +36,7 @@ int main()
             else
             {
                 int j = 0;
-                for (j = n -i - 1; j > i; --j)
+                for (j = n - i - 1; j > i; --j)
                     if (ch[j] == ch[i])
                         break;
                 change += n - 1 - j - i;

@@ -19,7 +19,6 @@ int main()
 void ssin(int i)
 {
     int te = 1;
-
     for (; te < i; ++te)
     {
         std::cout << "sin(" << te;

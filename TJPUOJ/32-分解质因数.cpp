@@ -46,11 +46,10 @@ void decompose(int i)
             i /= te;
             std::cout << te;
             --te;
-        
-        if (primnum[i])
-            std::cout << "*";
-        else
-            std::cout << "*" << i;
+            if (primnum[i])
+                std::cout << "*";
+            else
+                std::cout << "*" << i;
         }
     }
 }

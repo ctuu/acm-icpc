@@ -7,18 +7,18 @@ int main()
     pass[0][0] = 1;
     for (i = 0; i <= m; ++i)
     {
-	for (j = 0; j < n; ++j)
-	    if (pass[i][j] > 0)
-	    {
-		if (j == n - 1)
-		    pass[i + 1][0] += pass[i][j];
-		else
-		    pass[i + 1][j + 1] += pass[i][j];
-		if (j == 0)
-		    pass[i + 1][n - 1] += pass[i][j];
-		else
-		    pass[i + 1][j - 1] += pass[i][j];
-	    }
+        for (j = 0; j < n; ++j)
+            if (pass[i][j] > 0)
+            {
+                if (j == n - 1)
+                    pass[i + 1][0] += pass[i][j];
+                else
+                    pass[i + 1][j + 1] += pass[i][j];
+                if (j == 0)
+                    pass[i + 1][n - 1] += pass[i][j];
+                else
+                    pass[i + 1][j - 1] += pass[i][j];
+            }
     }
     std::cout << pass[m][0] << std::endl;
     return 0;

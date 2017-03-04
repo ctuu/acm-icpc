@@ -17,7 +17,6 @@ int main()
             --i;
             continue;
         }
-
         std::cout << gr[s - 48];
         if (i--)
             std::cout << " ";

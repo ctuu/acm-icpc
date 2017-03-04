@@ -39,7 +39,6 @@ void show(int n, int ma)
     int i;
     char ps[20];
     const static int size = n;
-
     for (i = size - 1; i >= 0; i--, ma >>= 1)
         ps[i] = (01 & ma) + '0';
     ps[size] = '\0';

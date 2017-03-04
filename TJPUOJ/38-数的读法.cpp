@@ -1,7 +1,7 @@
 //1002000,10200000
 /*
-20 0000 0000
-[shi]-yi-[qian bai shi]-wan-[qian ban shi]-()
+    20 0000 0000
+    [shi]-yi-[qian bai shi]-wan-[qian ban shi]-()
 */
 #include <iostream>
 #include <vector>
@@ -42,7 +42,6 @@ int speak(int a, int b)
     std::vector<std::string> v1{"yi ", "er ", "san ", "si ", "wu ", "liu ", "qi ", "ba ", "jiu "};
     if (b <= 0)
         return -1;
-
     if (c >= 1000)
     {
         std::cout << v1[c / 1000 - 1];
@@ -53,7 +52,6 @@ int speak(int a, int b)
     }
     else if (a > -1 || b > c)
         isl = true;
-
     if (c >= 100)
     {
         if (isl)
@@ -61,7 +59,7 @@ int speak(int a, int b)
             std::cout << "ling ";
             isl = false;
         }
-            std::cout << v1[c / 100 - 1];
+        std::cout << v1[c / 100 - 1];
         c -= d / 100 * 100;
         d = c;
         std::cout << "bai ";
@@ -69,7 +67,6 @@ int speak(int a, int b)
     }
     else if (b > c)
         isl = true;
-
     if (c >= 10)
     {
         if (isl)
@@ -86,7 +83,6 @@ int speak(int a, int b)
     }
     else if (b > c)
         isl = true;
-
     if (c > 0)
     {
         if (isl)
@@ -94,7 +90,6 @@ int speak(int a, int b)
             std::cout << "ling ";
             isl = false;
         }
-
         std::cout << v1[c - 1];
     }
     return 0;

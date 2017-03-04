@@ -21,7 +21,7 @@ int main()
     if (tx <= 0 || ty <= 0)
         std::cout << "0.00" << std::endl;
     else
-        std::cout << std::fixed << std::setprecision(2) << tx * ty << std::endl;
+        std::cout << std::fixed << std::setprecision(2) << tx *ty << std::endl;
     return 0;
 }
 

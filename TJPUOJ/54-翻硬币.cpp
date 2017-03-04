@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
-void swap(char &a,char &b);
+void swap(char &a, char &b);
 int main()
 {
     int i, sum = 0, j;
-    std::string nst,nnd;
+    std::string nst, nnd;
     std::cin >> nst >> nnd;
-    for (i = 0; i < nst.size()-1; ++i)
+    for (i = 0; i < nst.size() - 1; ++i)
     {
         if (nst[i] != nnd[i])
-        {   swap(nst[i], nst[i+1]);
+        {   swap(nst[i], nst[i + 1]);
             ++sum;
         }
     }

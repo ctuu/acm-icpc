@@ -8,7 +8,7 @@ int main()
     for (i = 0; i < NU; ++i)
     {
         temp = n;
-        for (j = i+2; temp >=1; temp /= j, ++j)
+        for (j = i + 2; temp >= 1; temp /= j, ++j)
             if (temp / j * j == temp)
                 ++co[i];
             else
@@ -17,12 +17,12 @@ int main()
     for (temp = 0, i = 0; i < NU; ++i)
         temp = (co[temp] >= co[i]) ? temp : i;
     if (co[temp] == 0)
-        std::cout << "1\n" <<n;
+        std::cout << "1\n" << n;
     else
     {
-        std::cout << co[temp] << '\n' << temp+2;
+        std::cout << co[temp] << '\n' << temp + 2;
         --co[temp];
-        for (i = temp +3; co[temp]; ++i, --co[temp])
+        for (i = temp + 3; co[temp]; ++i, --co[temp])
             std::cout << "*" << i;
     }
     return 0;

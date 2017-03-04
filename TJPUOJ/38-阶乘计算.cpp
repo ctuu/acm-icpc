@@ -13,7 +13,7 @@ int main()
             add[te] = num[te] * i;
         for (te = 0; te < DIGIT; ++te)
         {
-            num[te + 1] += (add[te] + num[te])/10;
+            num[te + 1] += (add[te] + num[te]) / 10;
             num[te] = (add[te] + num[te]) % 10;
         }
     }
