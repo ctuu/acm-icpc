@@ -4,5 +4,10 @@
 --pad-header
 --delete-empty-lines
 --remove-brackets
---align-pointer=name
+--align-pointer=type
 --remove-comment-prefix
+--style=allman
+--style=bsd
+--style=break
+--attach-classes
+--indent-labels
