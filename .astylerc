@@ -1,0 +1,8 @@
+--indent-preproc-block
+--pad-comma
+--pad-oper
+--pad-header
+--delete-empty-lines
+--remove-brackets
+--align-pointer=name
+--remove-comment-prefix

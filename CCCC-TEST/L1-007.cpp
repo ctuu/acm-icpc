@@ -4,12 +4,13 @@
 int main()
 {
     int i;
-    std::vector<std::string> gr{"ling", "yi", "er", "san", "si", "wu", "liu", "qi","ba","jiu"};
+    std::vector<std::string> gr{"ling", "yi", "er", "san", "si", "wu", "liu", "qi", "ba", "jiu"};
     std::string num;
     std::cin >> num;
     i = num.size() - 1;
-    for (auto s:num)
+    for (auto s : num)
     {
+        // ssss
         if (s == '-')
         {
             std::cout << "fu ";
@@ -17,7 +18,7 @@ int main()
             continue;
         }
 
-        std::cout << gr[s-48];
+        std::cout << gr[s - 48];
         if (i--)
             std::cout << " ";
     }
