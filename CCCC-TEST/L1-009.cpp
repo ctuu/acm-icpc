@@ -1,6 +1,8 @@
 #include <iostream>
+
 long long GCD(long long a,  long long b);
 long long LCM(long long a, long long b);
+
 struct dfra
 {
     long long mum;
@@ -15,7 +17,7 @@ struct calcfra
 
 dfra& calcfra::combine(dfra rhs)
 {
-    int i = LCM(fra.den, rhs.den);
+    long long i = LCM(fra.den, rhs.den);
     fra.mum *= i / fra.den;
     rhs.mum *= i / rhs.den;
     fra.den = i;
@@ -26,12 +28,12 @@ dfra& calcfra::combine(dfra rhs)
     return this->fra;
 }
 
-
 int main()
 {
-    int i, mixn;
+    long long i, mixn;
     calcfra now;
     dfra next;
+    dfra next1[101];
     char t;
     std::cin >> i >> now.fra.mum >>  t >> now.fra.den;
     while (--i)
@@ -54,7 +56,8 @@ int main()
 
 long long GCD(long long a,  long long b)
 {
-    if (b) while ((a %= b) && (b %= a));
+    if (b)
+        while ((a %= b) && (b %= a));
     return a + b;
 }
 long long LCM(long long a, long long b)
