@@ -11,7 +11,7 @@ int main()
     std::ios::sync_with_stdio(0);
     std::cin.tie(0);
     int beg, n, i, j, lano, sbeg = -1, sla = -1;
-    std::array <int, 1200> num = {0};
+    std::array <int, 12000> num = {0};
     std::array<node, 100020> list;
     std::array<node, 100020> slt;
     std::cin >> beg >> n;
