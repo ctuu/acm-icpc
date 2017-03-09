@@ -5,7 +5,7 @@
 
 struct redbag
 {
-    int id;
+    int id = 0;
     double money = 0;
     int time = 0;
 };
@@ -24,7 +24,7 @@ int main()
         {
             std::cin >> j >> pr;
             mon[j - 1].money += pr;
-            ++mon[j].time;
+            ++mon[j - 1].time;
             spr += pr;
         }
         mon[i].money -= spr;
@@ -37,5 +37,5 @@ int main()
 
 bool compare(redbag a, redbag b)
 {
-    return (a.money > b.money) || (a.money == b.money && a.time > b.time)  || (a.money == b.money && a.time == b.time && a.id < b.id);
+    return (a.money > b.money) || (a.money == b.money && a.time > b.time) || (a.money == b.money && a.time == b.time && a.id < b.id);
 }
