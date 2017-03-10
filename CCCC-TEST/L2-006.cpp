@@ -12,7 +12,7 @@ struct tree
 };
 int main()
 {
-    int n, i, mid, a, b;
+    int n, i, mid;
     std::cin >> n;
     for (i = 0; i < n; ++i)
         std::cin >> pos[i];

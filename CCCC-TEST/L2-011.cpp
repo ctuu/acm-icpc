@@ -12,7 +12,7 @@ struct tree
 };
 int main()
 {
-    int n, i, mid, a, b;
+    int n, i, mid;
     std::cin >> n;
     for (i = 0; i < n; ++i)
         std::cin >> ino[i];
@@ -38,7 +38,7 @@ int main()
         {
             ste.be = mid + 1;
             ste.en = fte.en;
-            ste.sran = n - (fte.sran);
+            ste.sran = fte.sran + mid - fte.be + 1;
             if (ste.be <= ste.en)
                 tr.push(ste);
         }
@@ -58,7 +58,7 @@ int main()
 int find(int en, int sran)
 {
     int i;
-    for (i = 0; i <= en; ++i)
+    for (i = en; i >= 0; --i)
         if (ino[i] == pre[sran])
             return i;
     return -1;
