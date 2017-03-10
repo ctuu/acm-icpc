@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <queue>
 #include <array>
-std::array<int, 40> pos, ino;
+std::array<int, 40> pre, ino;
 int find(int be, int ran);
 struct tree
 {
@@ -15,15 +15,15 @@ int main()
     int n, i, mid, a, b;
     std::cin >> n;
     for (i = 0; i < n; ++i)
-        std::cin >> pos[i];
-    for (i = 0; i < n; ++i)
         std::cin >> ino[i];
+    for (i = 0; i < n; ++i)
+        std::cin >> pre[i];
     std::queue<tree> tr;
     i = 1;
     tree fte, ste;
     fte.be = 0;
     fte.en = n - 1;
-    fte.ran = n - 1;
+    fte.ran = 0;
     tr.push(fte);
     do
     {
@@ -38,7 +38,7 @@ int main()
         {
             ste.be = fte.be;
             ste.en = mid - 1;
-            ste.ran = fte.ran - (fte.en - mid + 1);
+            ste.ran = n - (fte.ran - (mid - fte.en + 1));
             if (ste.be <= ste.en)
                 tr.push(ste);
         }
@@ -46,7 +46,7 @@ int main()
         {
             ste.be = mid + 1;
             ste.en = fte.en;
-            ste.ran = fte.ran - 1;
+            ste.ran = fte.ran + 1;
             if (ste.be <= ste.en)
                 tr.push(ste);
         }
@@ -57,9 +57,11 @@ int main()
 }
 int find(int en, int ran)
 {
-    int i;
-    for (i = 0; i <= en; ++i)
-        if (ino[i] == pos[ran])
-            return i;
+    int i, j;
+    do
+        for (i = 0; i <= en; ++i)
+            if (ino[i] == pre[ran])
+                return i;
+    while (ran--);
     return -1;
 }
