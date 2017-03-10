@@ -3,12 +3,12 @@
 #include <queue>
 #include <array>
 std::array<int, 40> pre, ino;
-int find(int be, int ran);
+int find(int be, int sran);
 struct tree
 {
     int be;
     int en;
-    int ran;
+    int sran;
 };
 int main()
 {
@@ -23,7 +23,7 @@ int main()
     tree fte, ste;
     fte.be = 0;
     fte.en = n - 1;
-    fte.ran = 0;
+    fte.sran = 0;
     tr.push(fte);
     do
     {
@@ -32,21 +32,21 @@ int main()
             std::cout << " ";
         else
             i = 0;
-        mid = find(fte.en, fte.ran);
+        mid = find(fte.en, fte.sran);
         std::cout << ino[mid];
-        if (fte.be < mid)
-        {
-            ste.be = fte.be;
-            ste.en = mid - 1;
-            ste.ran = n - (fte.ran - (mid - fte.en + 1));
-            if (ste.be <= ste.en)
-                tr.push(ste);
-        }
         if (mid  < fte.en)
         {
             ste.be = mid + 1;
             ste.en = fte.en;
-            ste.ran = fte.ran + 1;
+            ste.sran = n - (fte.sran);
+            if (ste.be <= ste.en)
+                tr.push(ste);
+        }
+        if (fte.be < mid)
+        {
+            ste.be = fte.be;
+            ste.en = mid - 1;
+            ste.sran = fte.sran + 1;
             if (ste.be <= ste.en)
                 tr.push(ste);
         }
@@ -55,13 +55,11 @@ int main()
     while (!tr.empty());
     return 0;
 }
-int find(int en, int ran)
+int find(int en, int sran)
 {
-    int i, j;
-    do
-        for (i = 0; i <= en; ++i)
-            if (ino[i] == pre[ran])
-                return i;
-    while (ran--);
+    int i;
+    for (i = 0; i <= en; ++i)
+        if (ino[i] == pre[sran])
+            return i;
     return -1;
 }
