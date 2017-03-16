@@ -13,25 +13,21 @@ int main()
         word.insert(i, 1, sch);
     id = 0;
     int maxlen = 0;
-    for (int i = 0; i < word.size(); ++i)
-        std::cout << word[i];
-    std::cout << std::endl;
-    // std::cout << word << std::endl;
-    for (int i = 1; i < word.size(); ++i)
+    for (int i = 1; i < word.size() - 1; ++i)
     {
         if (len[id] + id > i)
             len[i] = std::min(len[id * 2 - i], len[id] - (i - id));
         else
             len[i] = 1;
-        while (word[i + len[i]] == word[i - len[i]])
+        while (word[i + len[i]] == word[i - len[i]] && i + len[i] < word.size())
             ++len[i];
         if (len[i] + i > id + len[id])
             id = i;
         if (maxlen < len[i])
             maxlen = len[i];
     }
-    for ( int i = 0; i < word.size(); ++i)
-        std::cout << len[i] << " ";
-    std::cout << std::endl << maxlen - 1;
+    // for ( int i = 0; i < word.size(); ++i)
+    //     std::cout << len[i] << " ";
+    std::cout << maxlen - 1;
     return 0;
 }
