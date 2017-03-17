@@ -26,8 +26,6 @@ int main()
         if (maxlen < len[i])
             maxlen = len[i];
     }
-    // for ( int i = 0; i < word.size(); ++i)
-    //     std::cout << len[i] << " ";
     std::cout << maxlen - 1;
     return 0;
 }
