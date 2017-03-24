@@ -39,13 +39,13 @@ int main()
                 std::cin >> word;
                 if (word == "root")
                 {
-                    if (sfind(i) == heap[0])
+                    if (i == heap[0])
                         flag = 1;
                 }
                 else
                 {
                     std::cin >> word >> j;
-                    if (sfind(i) == (sfind(j) + 1) / 2)
+                    if (sfind(i) == (sfind(j) - 1) / 2)
                         flag = 1;
                 }
             }
