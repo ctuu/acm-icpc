@@ -23,7 +23,7 @@ int main()
 		cin >> temp.a >> temp.b;
 		road.insert(temp);
 	}
-	for (auto i: road)
+	path i = *road.begin();
 	cout << i.a << " " << i.b << endl;
     cout << "Hello";
     return 0;
