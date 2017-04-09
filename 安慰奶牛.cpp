@@ -1,80 +1,71 @@
 #include <bits/stdc++.h>
-#define MNUM 102
-#define INF 0x03ffffff
 using namespace std;
-
 struct path
 {
-    int a, b, cost;
+    int fo;
+    int to;
+    int cost;
 };
-struct comp_path
-{
-    bool operator()(const path i, const path j) const
-    {
-	return i.cost < j.cost;
-    }
-};
-
+bool comp_path(path a, path b);
+array<int, 10002> pre;
+int find(int i);
+void join(int a, int b);
+array<long long, 10002> value;
+array<path, 100002> roads;
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m;
-    cin >> n >> m;
-	vector<int> ti;
-	ti.push_back(0);
-	for (int c = 1; c <= n; ++c)
-		{
-			int l;
-			cin >> l;
-			ti.push_back(l);
-		}
-	array<array<int, MNUM>, MNUM> lj;
-    array<int, MNUM> rlj;
-
-    rlj.fill(INF);
-    for (auto &i : lj)
-	i.fill(0);
-    rlj[1] = 0;
-
-    while (m--)
-    {
-	int a, b, c;
-	cin >> a >> b >> c;
-	if (lj[a][b])
-	    lj[a][b] = lj[b][a] = min(c, lj[a][b]);
-	else
-	    lj[a][b] = lj[b][a] = c;
+    int m, n;
+    cin >> m >> n;
+    int total = 0;
+    long long sum = 1001;
+    for (int i = 0; i < m; ++i)
+	{
+        cin >> value[i];
+        sum = min(sum, value[i]);
+        pre[i] = i;
     }
 
-    int cur = 1;
-    int tot = 0;
-    set<int> vied;
-    vied.insert(1);
-    int sum = 0;
-    while (tot < n && vied.size() < n)
+    for (int i = 0; i < n; ++i)
     {
-		set<path, comp_path> sel;
-		for (auto i : vied)
-		{
-		    path temp;
-		    for (int j = 1; j <= n; ++j)
-			if (lj[i][j])
-			{
-			    temp.a = i;
-			    temp.b = j;
-			    temp.cost = lj[i][j];
-			    sel.insert(temp);
-			}
-		}
-		path temp = *sel.begin();
-		sum += 2 * temp.cost + ti[temp.a] + ti[temp.b];
-		lj[temp.a][temp.b] = lj[temp.b][temp.a] = 0;
-		vied.insert(temp.a);
-		vied.insert(temp.b);
-		++tot;
+        cin >> roads[i].fo >> roads[i].to >> roads[i].cost;
+        roads[i].cost = roads[i].cost * 2 + value[roads[i].fo - 1] + value[roads[i].to - 1];
     }
-    sort(ti.begin(), ti.end());
-    cout << sum+ti[1];
+    sort(roads.begin(), roads.begin() + n, comp_path);
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (find(roads[i].fo) != find(roads[i].to))
+        {
+            sum += roads[i].cost;
+            join(roads[i].to, roads[i].fo);
+            cout << roads[i].fo << " -> " << roads[i].to << endl;
+            ++total;
+        }
+        if (total == m - 1)
+            break;
+    }
+    cout << sum;
     return 0;
+}
+
+bool comp_path(path a, path b)
+{
+    return a.cost < b.cost;
+}
+
+int find(int i)
+{
+    while (pre[i] != i)
+        i = pre[i];
+    return i;
+}
+
+void join(int a, int b)
+{
+    int i, j;
+    i = find(a);
+    j = find(b);
+    pre[i] = j;
 }

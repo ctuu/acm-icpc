@@ -1,7 +1,6 @@
 #include <iostream>
 
 int pre[102];
-int rank[102];
 int eme[102][102];
 int find(int i);
 void join(int a, int b);
