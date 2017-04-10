@@ -7,11 +7,12 @@ struct path
     int cost;
 };
 bool comp_path(path a, path b);
-array<int, 10002> pre;
+int pre[10002];
 int find(int i);
-void join(int a, int b);
-array<long long, 10002> value;
-array<path, 100002> roads;
+bool join(int a, int b);
+int value[10002];
+path roads[100002];
+
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -19,7 +20,7 @@ int main()
     int m, n;
     cin >> m >> n;
     int total = 0;
-    long long sum = 1001;
+    int sum = 1001;
     for (int i = 0; i < m; ++i)
 	{
         cin >> value[i];
@@ -30,17 +31,16 @@ int main()
     for (int i = 0; i < n; ++i)
     {
         cin >> roads[i].fo >> roads[i].to >> roads[i].cost;
-        roads[i].cost = roads[i].cost * 2 + value[roads[i].fo - 1] + value[roads[i].to - 1];
+        roads[i].cost = (roads[i].cost << 1) + value[roads[i].fo - 1] + value[roads[i].to - 1];
     }
-    sort(roads.begin(), roads.begin() + n, comp_path);
+    sort(roads, roads + n, comp_path);
 
     for (int i = 0; i < n; ++i)
     {
-        if (find(roads[i].fo) != find(roads[i].to))
+        if (join(roads[i].to, roads[i].fo))
         {
             sum += roads[i].cost;
-            join(roads[i].to, roads[i].fo);
-            cout << roads[i].fo << " -> " << roads[i].to << endl;
+            // cout << roads[i].fo << " -> " << roads[i].to << endl;
             ++total;
         }
         if (total == m - 1)
@@ -57,15 +57,15 @@ bool comp_path(path a, path b)
 
 int find(int i)
 {
-    while (pre[i] != i)
-        i = pre[i];
-    return i;
+    return i == pre[i] ? i: pre[i] = find(pre[i]);
 }
 
-void join(int a, int b)
+bool join(int a, int b)
 {
-    int i, j;
-    i = find(a);
-    j = find(b);
+    int i = find(a);
+    int j = find(b);
+    if (i == j)
+        return false;
     pre[i] = j;
+    return true;
 }
