@@ -57,7 +57,11 @@ bool comp_path(path a, path b)
 
 int find(int i)
 {
-    return i == pre[i] ? i: pre[i] = find(pre[i]);
+    int j = i;
+    while (pre[i] != i) 
+    i = pre[i]; 
+    pre[j] = i;
+    return i; 
 }
 
 bool join(int a, int b)
