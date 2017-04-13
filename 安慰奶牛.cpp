@@ -63,13 +63,3 @@ int find(int i)
     pre[j] = i;
     return i; 
 }
-
-bool join(int a, int b)
-{
-    int i = find(a);
-    int j = find(b);
-    if (i == j)
-        return false;
-    pre[i] = j;
-    return true;
-}
