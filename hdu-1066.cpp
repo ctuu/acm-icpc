@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <array>
 using namespace std;
 int main()
 {
@@ -21,7 +22,7 @@ int main()
                     cout << la << " " << j << endl;
                     continue;
                 }
-                la %= 10;
+            la %= 10;
         }
         else
             la *= i;

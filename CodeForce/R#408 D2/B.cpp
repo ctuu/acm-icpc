@@ -1,30 +1,31 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
-int a[1000002];
+
+bool hole[1000001] = {0};
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    for (int i = 0; i < 1000002; ++i)
-		a[i] = i;
-	int n, m, k;
-	int max = 0;
-	cin >> n >> m >> k;
-	while (m--)
-	{
-		int i;
-		cin >> i;
-		max = (max > i) ? max:i;
-	}
-
-	while (k--)
-	{
-		int i, j, te;
-		cin >> i >> j;
-		te = a[j];
-		a[j] = a[i];
-		a[i] = te;
-	}
-	cout << a[1];
+    int n, m, k;
+    cin >> n >> m >> k;
+    while (m--)
+    {
+        int i;
+        cin >> i;
+        hole[i] = 1;
+    }
+    int inpo = 1;
+    while (k--)
+    {
+       int a, b;
+       cin >> a >> b;
+       if (hole[inpo])
+           break;
+       if (a == inpo)
+           inpo = b;
+       else if (b == inpo)
+           inpo = a; 
+    }
+    cout << inpo;
     return 0;
 }
