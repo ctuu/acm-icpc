@@ -8,21 +8,20 @@ int main()
     cin >> n;
     vector<int> nuo;
     vector<int> nue;
+    int sum  = 0;
     for (int i = 0; i < n; ++i)
     {
         int te;
         cin >> te;
         if (abs(te) % 2 == 0)
-            nue.push_back(te);
+        {
+            if (te > 0)
+                sum += te;
+        }
         else
             nuo.push_back(te);
     }
     sort(nuo.begin(), nuo.end(), greater<int>());
-    sort(nue.begin(), nue.end(), greater<int>());
-    int sum  = 0;
-    for (auto i : nue)
-        if (i > 0)
-            sum += i;
     int i;
     sum += nuo[0];
     for (i = 1; i < nuo.size(); ++i)

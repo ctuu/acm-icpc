@@ -34,6 +34,12 @@ int dij(vector<vector<edge>> &lj, int be, int en)
 {
     int n = lj.size();
     vector<int> rlj(n, INF);
-    set<edge> mod;
+    set<edge, comp_path> mod;
+    for (auto pa: lj[be])
+        mod.insert(pa);
+    for ()
+    {
+        
+    }
     return 0;
 }
