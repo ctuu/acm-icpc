@@ -1,41 +1,40 @@
 #include <bits/stdc++.h>
+#include <cctype>
 using namespace std;
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    string week[7] = {"MON ", "TUE ", "WED ", "THU ", "FRI ", "SAT ", "SUN "};
     string a, b;
-    bool flag = 0;
+    int i, n;
+    string week[7] = {"MON ", "TUE ", "WED ", "THU ", "FRI ", "SAT ", "SUN "};
     cin >> a >> b;
-    int n = min(a.size(), b.size());
-    for (int i = 0; i < n; ++i)
-    {
-        if (!flag && a[i] == b[i] && 'A' <= a[i] && a[i] <= 'Z')
+    n = min(a.size(), b.size());
+    for (i = 0; i < n; ++i)
+       if (a[i] == b[i] && isupper(a[i]) && a[i] <= 'G')
         {
             cout << week[a[i] - 'A'];
-            flag = 1;
+            break;
         }
-        else if (flag && a[i] == b[i])
+    for (++i; i < n; ++i)
+        if (a[i] == b[i] && isdigit(a[i])) 
         {
-            if ('0' <= a[i] && a[i] <= '9')
-                cout << a[i];
-            else if ('A' <= a[i] && a[i] <= 'N')
-                cout << (10 + a[i] - 'A');
+            cout << '0' << a[i];
+            break;
         }
-    }
+        else if (a[i] == b[i] && isupper(a[i]) && a[i] <= 'N')
+        {
+            cout << (10 + a[i] - 'A');
+            break;
+        }
     cout << ":";
     cin >> a >> b;
     n = min(a.size(), b.size());
-   for (int i = 0; i < n; ++i)
-   {
-       if (a[i] == b[i] && 'a' <= a[i] && a[i] <= 'z')
-       {
-           if (i < 10)
-               cout << '0';
-            cout << i;
+    for (i = 0; i < n; ++i)
+        if (a[i] == b[i] && isalpha(a[i]))
+        {
+            cout << setw(2) << setfill('0') << i;
             break;
-       }
-   }
+        }
     return 0;
 }
