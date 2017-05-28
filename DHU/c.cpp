@@ -1,19 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
+const long long MOD = 1e9 + 7;
 int main()
 {
     array<int, 100002> nu;
-    int n, k;
+    long long n, k;
     while (cin >> n >> k)
     {
         nu.fill(0);
         nu[0] = 1;
-        for (int i = 0; i < n; ++i)
+        long long sum = 0;
+        for (int i = 1; i < k; ++i)
         {
-            for (int j = 1; i + j <= n && j <= k; ++j)
-                nu[i + j] = nu[i + j] % 1000000007 +  nu[i] % 1000000007;
+            nu[i] = 2 * nu[i - 1] % MOD;
         }
-        cout << nu[n] << endl;
+        sum = (2 * nu[k - 1] - 1) % MOD;
+        for (int i = k; i < n; ++i)
+        {
+            nu[i] = sum;
+            sum = (2 * sum) % MOD - nu[i - k] % MOD;
+            if (sum < 0)
+                sum += MOD;
+            else
+                sum %= MOD;
+        }
+        cout << nu[n - 1] << endl;
     }
     return 0;
 }
