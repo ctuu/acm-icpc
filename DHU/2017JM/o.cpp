@@ -12,7 +12,7 @@ int main()
         for (auto &i: ng)
             cin >> i;
         sort(ng.begin(), ng.end());
-        int sum = 0;
+        long long sum = 0;
         for (int i = 0; i < n; ++i)
             sum += abs(ng[2 * i + 1] - ng[2 * i]);
         cout << sum << endl;

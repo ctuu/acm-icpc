@@ -11,30 +11,25 @@ int main()
     ios::sync_with_stdio(0);
     cin.tie(0);
     int n;
-     for (auto &i: xrbs)
-        for (auto &k: i)
-             k = ' ';
-    draw(1, xn[M],M);
+    for (auto &i : xrbs)
+        for (auto &k : i)
+            k = ' ';
+
+    draw(1, xn[M], M);
     bool ju = 0;
-    while (cin >> n)
+    while (cin >> n, n > 0)
     {
-        if (n == 0)
-        return 0;
         if (ju)
             cout << endl;
         ju = 1;
+
         int k = xn[n];
         for (int i = 1 + xn[M] - xn[n]; i <= xn[M]; ++i)
         {
-            int j;
             --k;
-            for (j = 1; j <= xn[n + 1]; ++j)
-            {
+            for (int j = 1; j <= xn[n + 1] - k; ++j)
                 cout << xrbs[i][j];
-                if (j >= xn[n+1] - k)
-                    break;
-            }
-                cout << endl;
+            cout << endl;
         }
     }
     return 0;
@@ -45,8 +40,8 @@ void draw(int x, int y, int level)
     if (level > 1)
     {
         draw(x, y, level - 1);
-        draw(x + xn[level - 1], y - xn[level - 2] - (xn[level - 1]/2), level - 1);
-        draw(x + xn[level - 1], y + xn[level - 2] + (xn[level - 1]/2), level - 1);
+        draw(x + xn[level - 1], y - xn[level - 1], level - 1);
+        draw(x + xn[level - 1], y + xn[level - 1], level - 1);
     }
     else
     {
