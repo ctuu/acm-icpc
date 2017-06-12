@@ -43,11 +43,8 @@ void draw(int x, int y, int level)
         draw(x + xn[level - 1], y - xn[level - 1], level - 1);
         draw(x + xn[level - 1], y + xn[level - 1], level - 1);
     }
-    else
-    {
-        xrbs[x][y] = xrbs[x + 1][y - 1] = '/';
-        xrbs[x][y + 1] = xrbs[x + 1][y + 2] = '\\';
-        xrbs[x + 1][y] = xrbs[x + 1][y + 1] = '_';
-    }
+    xrbs[x][y] = xrbs[x + 1][y - 1] = '/';
+    xrbs[x][y + 1] = xrbs[x + 1][y + 2] = '\\';
+    xrbs[x + 1][y] = xrbs[x + 1][y + 1] = '_';
     return;
 }
