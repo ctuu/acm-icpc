@@ -14,7 +14,11 @@ int main()
                 if (cin >> k, k == 1)
                     ++a[j];
         for (int i = 0; i < n; ++i)
-            cout << a[i] << ' ';
+        {
+            if (i != 0)
+                cout << ' ';
+            cout << a[i];
+        }
         cout << endl;
     }
     return 0;
