@@ -2,8 +2,10 @@
 using namespace std;
 class po
 {
-  public:
+  private:
     int x, y;
+
+  public:
     po() = default;
     po(int a, int b)
     {
@@ -48,7 +50,7 @@ class po
         if (fos == false)
         {
             this->y = a.y + b.x - a.x;
-            if (a.x >= b.x)
+            if (a.y != b.y)
                 this->x = a.x + a.y - b.y;
             else
                 this->x = a.x + b.y - a.y;
@@ -56,7 +58,7 @@ class po
         else
         {
             this->y = b.y + b.x - a.x;
-            if (a.x >= b.x)
+            if (a.y != b.y)
                 this->x = b.x + a.y - b.y;
             else
                 this->x = b.x + b.y - a.y;
@@ -66,8 +68,8 @@ class po
 
 int main()
 {
-    // ios_base::sync_with_stdio(0);
-    // cin.tie(0);
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
     int n, ans;
     set<po> oc;
     while (cin >> n)
@@ -76,42 +78,22 @@ int main()
         oc.clear();
         for (int i = 0; i < n; ++i)
         {
-            po temp;
-            cin >> temp;
-            oc.insert(temp);
+            po te;
+            cin >> te;
+            oc.insert(te);
         }
-
-        // for (auto it = oc.cbegin(); it != oc.cend(); ++it)
-        //     cout << *it;
         for (auto i = oc.cbegin(); i != oc.cend(); ++i)
             for (auto j = i; j != oc.cend(); ++j)
             {
                 if (i == j)
                     continue;
                 po pc, pd;
-                bool ti = 1;
-                if (i->x < j->x && i->y >= j->y || i->x >= j->x && i->y > j->y)
-                {
-                    pc.poly(*j, *i, false);
-                    pd.poly(*j, *i, true);
-                    ti = 0;
-                }
-                else
-                {
-                    pc.poly(*i, *j, false);
-                    pd.poly(*i, *j, true);
-                }
+                pc.poly(*i, *j, false);
+                pd.poly(*i, *j, true);
                 if (oc.count(pc) && oc.count(pd))
-                {
-                    if (ti)
-                        cout << *i << *j;
-                    else
-                        cout << "!" << *j << *i;
-                    cout << pc << pd << endl;
                     ++ans;
-                }
             }
-        cout << ans << endl;
+        cout << ans / 2 << endl;
     }
     return 0;
 }

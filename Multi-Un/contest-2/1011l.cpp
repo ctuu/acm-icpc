@@ -1,100 +1,124 @@
-//Author:.firstiaowuga
-#include <iostream>
-#include <algorithm>
-#include <set>
-#include <vector>
-#include <queue>
-#include <cmath>
-#include <cstring>
-#include <cstdio>
-#include <ctime>
-#include <map>
-#include <bitset>
-#define mem(s,ch) memset(s,ch,sizeof(s))
-#define da cout<<da<<endl
-const long long N=500+10;
+#include <bits/stdc++.h>
+#define SHIFT 100
 using namespace std;
-int n;
-set<pair<int,int>>qu;
-// int pic[250][250];
-pair<int,int>s[N];
-bool cmp(pair<int,int> a,pair<int,int> b){
-    if(a.first==b.first){
-        return a.second<b.second;
+class po
+{
+  private:
+    int x, y;
+
+  public:
+    po() = default;
+    po(int a, int b)
+    {
+        this->x = a;
+        this->y = b;
     }
-    else return a.first<b.first;
-}
+    bool operator<(class po const &b) const
+    {
+        if (x == b.x)
+            return y < b.y;
+        else
+            return x < b.x;
+    }
+    bool operator==(class po const &b) const
+    {
+        if (x == b.x && y == b.y)
+            return true;
+        return false;
+    }
+    bool operator!=(class po const &b) const
+    {
+        if (x == b.x && y == b.y)
+            return false;
+        return true;
+    }
+    friend istream &operator>>(istream &is, po &item)
+    {
+        is >> item.x >> item.y;
+        if (is)
+            ;
+        else
+            item = po();
+        return is;
+    }
+    friend ostream &operator<<(ostream &os, const po &item)
+    {
+        os << "x: " << item.x << " y: " << item.y << endl;
+        return os;
+    }
+    int rx()
+    {
+        return x;
+    }
+    int ry()
+    {
+        return y;
+    }
+    bool poly(class po const &a, class po const &b, bool fos)
+    {
+        if (fos == false)
+        {
+            this->y = a.y + b.x - a.x;
+            if (a.y != b.y)
+                this->x = a.x + a.y - b.y;
+            else
+                this->x = a.x + b.y - a.y;
+        }
+        else
+        {
+            this->y = b.y + b.x - a.x;
+            if (a.y != b.y)
+                this->x = b.x + a.y - b.y;
+            else
+                this->x = b.x + b.y - a.y;
+        }
+        if (this->x < 0 || this->y < 0 || this->x > 200 || this->y > 200)
+            return false;
+        return true;
+    }
+};
+
 int main()
 {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int n, ans;
+    array<array<bool, 602>, 602> opo;
+    array<po, 500> oc;
     while (cin >> n)
     {
-        qu.clear();
-        long long ct = 0;
-        // mem(pic, 0);
-        for (int i = 0; i < n; i++)
+        ans = 0;
+        for (auto &i : opo)
+            i.fill(false);
+        for (int i = 0; i < n; ++i)
         {
-            cin >> s[i].first >> s[i].second;
-            qu.insert(s[i]);
-            // pic[s[i].first + 100][s[i].second + 100] = 1;
+            int a, b;
+            cin >> a >> b;
+            po te = po(a + SHIFT, b + SHIFT);
+            oc[i] = te;
+            opo[a + SHIFT][b + SHIFT] = true;
         }
-        //sort(s,s+n,cmp);
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        for (int i = 0; i < n; ++i)
+            for (int j = i + 1; j < n; ++j)
             {
-                if (i == j)
-                    continue;
-                pair<int, int> t1, t2;
-                int f1 = 1, f2 = 1;
-                int mod = 0;
-                if (s[i].first >= s[j].first && s[i].second <= s[j].second)
+                po pc, pd;
+                bool ti = 1;
+                if (oc[i].rx() < oc[j].rx() && oc[i].ry() >= oc[j].ry() || oc[i].rx() >= oc[j].rx() && oc[j].ry() > oc[j].ry())
                 {
-                    mod = 1;
-                    t1.first = s[i].second - s[j].second + s[i].first;
-                    t1.second = s[i].first - s[j].first + s[i].second;
-                    t2.first = s[i].second - s[j].second + s[j].first;
-                    t2.second = s[i].first - s[j].first + s[j].second;
-                }
-                else if (s[i].first < s[j].first && s[i].second > s[j].second)
-                {
-                    mod = 2;
-                    t1.first = s[j].second - s[i].second + s[j].first;
-                    t1.second = s[j].first - s[i].first + s[j].second;
-                    t2.first = s[j].second - s[i].second + s[i].first;
-                    t2.second = s[j].first - s[i].first + s[i].second;
-                }
-                else if (s[i].first <= s[j].first && s[i].second <= s[j].second)
-                {
-                    mod = 3;
-                    t1.first = s[i].second - s[j].second + s[i].first;
-                    t1.second = s[j].first - s[i].first + s[i].second;
-                    t2.first = s[i].second - s[j].second + s[j].first;
-                    t2.second = s[j].first - s[i].first + s[j].second;
-                }
-                else if (s[i].first > s[j].first && s[i].second > s[j].second)
-                {
-                    mod = 4;
-                    t1.first = s[j].second - s[i].second + s[j].first;
-                    t1.second = s[i].first - s[j].first + s[j].second;
-                    t2.first = s[j].second - s[i].second + s[i].first;
-                    t2.second = s[i].first - s[j].first + s[i].second;
+                    if (!pc.poly(oc[j], oc[i], false) || !pd.poly(oc[j], oc[i], true))
+                        continue;
+                    ti = 0;
                 }
                 else
-                continue;
-                if (!qu.count(t1))
-                    f1 = 0;
-                if (!qu.count(t2))
-                        f2 = 0;
-                if (f1 && f2)
                 {
-                    ct++;
-                    cout << "si " << s[i].first << " " << s[i].second << endl;
-                    cout << "sj " << s[j].first << " " << s[j].second << endl;
-                    cout << "t1 " << t1.first << " " << t1.second << endl;
-                    cout << "t2 " << t2.first << " " << t2.second << endl;
-                    cout << mod << endl << endl;
+                    if (!pc.poly(oc[i], oc[j], false) || !pd.poly(oc[i], oc[j], true))
+                    continue;
                 }
+                // cout << oc[i] << oc[j] << pc << pd << endl;
+                if (opo[pc.rx()][pc.ry()] && opo[pd.rx()][pd.ry()])
+                    ++ans;
             }
-        cout << ct / 2 << endl;
+        cout << ans / 2 << endl;
     }
     return 0;
 }
