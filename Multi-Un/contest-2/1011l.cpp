@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define SHIFT 100
+#define SHIFT 300
 using namespace std;
 class po
 {
@@ -84,7 +84,7 @@ int main()
     cin.tie(0);
     int n, ans;
     array<array<bool, 602>, 602> opo;
-    array<po, 500> oc;
+    array<po, 501> oc;
     while (cin >> n)
     {
         ans = 0;
@@ -102,23 +102,30 @@ int main()
             for (int j = i + 1; j < n; ++j)
             {
                 po pc, pd;
-                bool ti = 1;
-                if (oc[i].rx() < oc[j].rx() && oc[i].ry() >= oc[j].ry() || oc[i].rx() >= oc[j].rx() && oc[j].ry() > oc[j].ry())
-                {
-                    if (!pc.poly(oc[j], oc[i], false) || !pd.poly(oc[j], oc[i], true))
-                        continue;
-                    ti = 0;
-                }
-                else
-                {
-                    if (!pc.poly(oc[i], oc[j], false) || !pd.poly(oc[i], oc[j], true))
-                    continue;
-                }
+                // bool ti = 1;
+                // if (oc[i].rx() < oc[j].rx() && oc[i].ry() >= oc[j].ry() || oc[i].rx() >= oc[j].rx() && oc[j].ry() > oc[j].ry())
+                // {
+                //     if (!pc.poly(oc[j], oc[i], false) || !pd.poly(oc[j], oc[i], true))
+                //         continue;
+                //     ti = 0;
+                // }
+                // else
+                // {
+                //     if (!pc.poly(oc[i], oc[j], false) || !pd.poly(oc[i], oc[j], true))
+                //     continue;
+                // }
+                pc.poly(oc[j], oc[i], false);
+                pd.poly(oc[j], oc[i], true);
+                // cout << oc[i] << oc[j] << pc << pd << endl;
+                if (opo[pc.rx()][pc.ry()] && opo[pd.rx()][pd.ry()])
+                    ++ans;
+                pc.poly(oc[i], oc[j], false);
+                pd.poly(oc[i], oc[j], true);
                 // cout << oc[i] << oc[j] << pc << pd << endl;
                 if (opo[pc.rx()][pc.ry()] && opo[pd.rx()][pd.ry()])
                     ++ans;
             }
-        cout << ans / 2 << endl;
+        cout << ans / 4 << endl;
     }
     return 0;
 }
