@@ -13,25 +13,6 @@ class po
         this->x = a;
         this->y = b;
     }
-    bool operator<(class po const &b) const
-    {
-        if (x == b.x)
-            return y < b.y;
-        else
-            return x < b.x;
-    }
-    bool operator==(class po const &b) const
-    {
-        if (x == b.x && y == b.y)
-            return true;
-        return false;
-    }
-    bool operator!=(class po const &b) const
-    {
-        if (x == b.x && y == b.y)
-            return false;
-        return true;
-    }
     friend istream &operator>>(istream &is, po &item)
     {
         is >> item.x >> item.y;
@@ -54,7 +35,7 @@ class po
     {
         return y;
     }
-    bool poly(class po const &a, class po const &b, bool fos)
+    void poly(class po const &a, class po const &b, bool fos)
     {
         if (fos == false)
         {
@@ -72,9 +53,6 @@ class po
             else
                 this->x = b.x + b.y - a.y;
         }
-        if (this->x < 0 || this->y < 0 || this->x > 200 || this->y > 200)
-            return false;
-        return true;
     }
 };
 
@@ -102,26 +80,12 @@ int main()
             for (int j = i + 1; j < n; ++j)
             {
                 po pc, pd;
-                // bool ti = 1;
-                // if (oc[i].rx() < oc[j].rx() && oc[i].ry() >= oc[j].ry() || oc[i].rx() >= oc[j].rx() && oc[j].ry() > oc[j].ry())
-                // {
-                //     if (!pc.poly(oc[j], oc[i], false) || !pd.poly(oc[j], oc[i], true))
-                //         continue;
-                //     ti = 0;
-                // }
-                // else
-                // {
-                //     if (!pc.poly(oc[i], oc[j], false) || !pd.poly(oc[i], oc[j], true))
-                //     continue;
-                // }
                 pc.poly(oc[j], oc[i], false);
                 pd.poly(oc[j], oc[i], true);
-                // cout << oc[i] << oc[j] << pc << pd << endl;
                 if (opo[pc.rx()][pc.ry()] && opo[pd.rx()][pd.ry()])
                     ++ans;
                 pc.poly(oc[i], oc[j], false);
                 pd.poly(oc[i], oc[j], true);
-                // cout << oc[i] << oc[j] << pc << pd << endl;
                 if (opo[pc.rx()][pc.ry()] && opo[pd.rx()][pd.ry()])
                     ++ans;
             }
