@@ -16,10 +16,17 @@ int main()
         cin >> a >> b;
         for (int i = 0; i < n; ++i)
         {
-            if (a[i] != b[i])
+            if (a[i] == b[i])
                 ++s;
         }
-        if (s == abs(x - y) && x >=s && y >= s) 
+        bool ans = 0;
+        if (x + y > n)
+            if (x + y - n <= s && n - abs(x - y) >= s)
+                ans = 1;
+        if (x + y <= n)
+            if (n - abs(x - y) >= s)
+                ans = 1;
+        if (ans)
             cout << "Not lying" << endl;
         else
             cout << "Lying" << endl;

@@ -13,20 +13,6 @@ class po
         this->x = a;
         this->y = b;
     }
-    friend istream &operator>>(istream &is, po &item)
-    {
-        is >> item.x >> item.y;
-        if (is)
-            ;
-        else
-            item = po();
-        return is;
-    }
-    friend ostream &operator<<(ostream &os, const po &item)
-    {
-        os << "x: " << item.x << " y: " << item.y << endl;
-        return os;
-    }
     int rx()
     {
         return x;
@@ -49,7 +35,7 @@ class po
         {
             this->y = b.y + b.x - a.x;
             if (a.y != b.y)
-                this->x = b.x + a.y - b.y;
+                this->x = b.x + a.y - b.y;  
             else
                 this->x = b.x + b.y - a.y;
         }
@@ -60,12 +46,12 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, ans;
-    array<array<bool, 602>, 602> opo;
+    int n;
+    array<array<bool, 601>, 601> opo;
     array<po, 501> oc;
     while (cin >> n)
     {
-        ans = 0;
+        int ans = 0;
         for (auto &i : opo)
             i.fill(false);
         for (int i = 0; i < n; ++i)
