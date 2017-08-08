@@ -1,5 +1,7 @@
 #include <iostream>
 #include <array>
+#include <vector>
+#include <algorithm>
 #define N 50005
 #define M 50005
 #define A 50005
@@ -22,56 +24,67 @@ int PowerMod(int a, int b, int c)
 
 int main()
 {
-    // ios_base::sync_with_stdio(0);
-    // cin.tie(0);
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
     int t;
-    // array<int, N> ch;
+    array<int, N> ch;
     array<int, M> ca;
     array<int, M> qr;
     array<int, M> re;
-    array<int, 17> bin;
+    // array<int, 17> bin;
     //1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536
     cin >> t;
     while (t--)
     {
-        bin.fill(0);
+        // bin.fill(0);
         int n, m, q;
+        set<pair> va;
         cin >> n >> m >> q;
-        cout << n << "!" << endl;
         for (int i = 0; i < n; ++i)
-        {
-            cout << i << endl;
-            int temp, r = 65536, j = 16;
-            cin >> temp;
-            while (temp)
-            {
-                if (temp >= r)
-                {
-                    temp -= r;
-                    ++bin[j];
-                }
-                r >>= 1;
-                --j;
-            }
-        }
-        // for (int i = 0; i < 16; ++i)
-        //     cout << bin[i] << " ";
-        // cout << endl;
+            cin >> ch[i];
         for (int i = 0; i < m; ++i)
             cin >> ca[i];
         for (int i = 0; i < q; ++i)
             cin >> qr[i];
-        for (int j = 0; j < m; ++j)
+        sort(ch.begin(), ch.begin() + n);
+        sort(ca.begin(), ca.begin() + m);
+                for (int i = 0; i < n; ++i)
+            for (int i = 0; i < m; ++i)
+            {
+                int a = ch[i];
+                int b = ca[j];
+                int c = _GCD(a, b);
+                a /= c;
+                b /= c;
+                va.insert(a, b);
+            }
+        for (int i = 0; i < m; ++i)
         {
-            for (int k = 0; k < 16; ++k)
-                if (bin[k] && PowerMod(2, k, ca[j]) == qr[i])
+            for (int j = 0; j < n; ++j)
+            {
+                if (ch[j] < ca[i])
                 {
-                    cout << k << " " << ca[j] << " " << qr[i] << endl;
-                    ans += bin[k];
+                    ++re[ch[j]];
+                    continue;
                 }
+                int ans = 0;
+                int temp = ch[j], r = 65536, k = 16;
+                while (temp)
+                {
+                    if (temp >= r)
+                    {
+                        temp -= r;
+                        ans += PowerMod(2, k, ca[i]);
+                    }
+                    r >>= 1;
+                    --k;
+                }
+                // cout << ch[j] << " " << ca[i] << " " << ans << endl;
+                ++re[ans % ca[i]];
+            }
         }
-        cout << (ans & 1) << endl;
+        for (int i = 0; i < q; ++i)
+            cout << (re[i] & 1) << endl;
     }
-}
-return 0;
+    return 0;
 }
