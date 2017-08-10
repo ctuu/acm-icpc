@@ -8,7 +8,7 @@
 #define S 5005
 using namespace std;
 array<array<int, S>, S> dp;
-array <int, S> co;
+array<array<int, S>, S> co;
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -23,8 +23,10 @@ int main()
         cin >> s;
         for (auto &i : dp)
             i.fill(0);
-        co.fill(0);
+        for (auto &i : co)
+            i.fill(0);
         int ct = s.size();
+        int ans = 0;
         for (int i = 0; i < ct; ++i)
         {
             int ti = i, j = ct - 1;
@@ -34,6 +36,7 @@ int main()
                 {
                     dp[i][j] += abs(s[ti + co[i][j]] - s[k]);
                     ++co[i][j];
+                    ans = max (ans, co[i][j]);
                 }
                 else
                 {
@@ -45,16 +48,15 @@ int main()
                 }
             }
         }
-        int ans = 0;
-        for (int i = 0; i < ct; ++i)
-        {
-            for (int j = 0; j < ct; ++j)
-            {
-                cout << co[i][j];
-                ans = max(ans, co[i][j]);
-            }
-            cout << endl;
-        }
+        
+        // for (int i = 0; i < ct; ++i)
+        // {
+        //     for (int j = 0; j < ct; ++j)
+        //     {
+        //         cout << co[i][j];
+        //         ans = max(ans, co[i][j]);
+        //     }
+        // }
         cout << ans << endl;
     }
     return 0;
