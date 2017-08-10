@@ -1,28 +1,45 @@
-#include<stdio.h>
-#include<string.h>
-int dp[100010];
-int tmp[100010];
-int max(int a,int b){return a>b?a:b;}
-int main()
+#include <stdio.h>
+#define NUM 8
+
+int queen[NUM][NUM] = {0};
+_Bool pin[3][2 * NUM];
+int co = 0;
+
+void find(int x, int y);
+int main(void)
 {
-    int n,tot,p,w,v,m,i,j,k;
-    while(scanf("%d%d",&n,&tot)!=EOF)
-    {
-        memset(dp,0,sizeof(dp));
-        for(i=0;i<n;i++)
-        {
-            scanf("%d%d",&p,&m);
-            memcpy(tmp,dp,sizeof(dp));//继承前面的
-            for(j=0;j<m;j++)
-            {
-                scanf("%d%d",&w,&v);
-                for(k=tot-p;k>=w;k--)//按照背包九讲的说法，先将附件进行1次01背包
-                    tmp[k]=max(tmp[k],tmp[k-w]+v);
-            }
-            for(j=p;j<=tot;j++)//更新能更新的
-                dp[j]=max(dp[j],tmp[j-p]);
-        }
-        printf("%d\n",dp[tot]);
-    }
+    find(0, 0);
+    // printf("%d", co);
     return 0;
+}
+
+void find(int x, int y)
+{
+    int a, b;
+    if (x < NUM)
+    {
+        for (y = 0; y < NUM; y++, a = 0)
+        {
+            if (pin[0][y] == 0 && pin[1][x + y] == 0 && pin[2][NUM - 1 + y - x] == 0)
+            {
+                pin[0][y] = pin[1][x + y] = pin[2][NUM - 1 + y - x] = queen[x][y] = a = 1;
+                find(x + 1, 0);
+                pin[0][y] = pin[1][x + y] = pin[2][NUM - 1 + y - x] = queen[x][y] = 0;
+            }
+        }
+        if (a == 1)
+            find(x + 1, 0);
+    }
+    else
+    {
+        co++;
+        printf("No. %d\n",co);
+        for (a = 0; a < NUM; a++)
+        {
+            for (b = 0; b < NUM; b++)
+                printf("%d ", queen[a][b]);
+            printf("\n");
+        }
+        
+    }
 }
