@@ -1,45 +1,95 @@
 #include <stdio.h>
-#define NUM 8
+#include <string.h>
+#include <stdlib.h>
 
-int queen[NUM][NUM] = {0};
-_Bool pin[3][2 * NUM];
-int co = 0;
+int score[128], cost[128], cap, n;
+char name[128][128];
 
-void find(int x, int y);
-int main(void)
+int cmp(const void *p, const void *q)
 {
-    find(0, 0);
-    // printf("%d", co);
-    return 0;
+    int a = *(int *)p, b = *(int *)q;
+    if (cost[a] != cost[b])
+        return (cost[a] - cost[b]);
+    if (score[a] != score[b])
+        return (score[b] - score[a]);
+    return strcmp(name[a], name[b]);
 }
 
-void find(int x, int y)
+void solve()
 {
-    int a, b;
-    if (x < NUM)
+    static unsigned choice[256][4];
+    static int tab[256], tabcost[256], r[128];
+    int i, j, k, t;
+
+    for (i = 0; i < n && cost[i] > cap; i++)
+        ;
+
+    if (i >= n)
     {
-        for (y = 0; y < NUM; y++, a = 0)
-        {
-            if (pin[0][y] == 0 && pin[1][x + y] == 0 && pin[2][NUM - 1 + y - x] == 0)
-            {
-                pin[0][y] = pin[1][x + y] = pin[2][NUM - 1 + y - x] = queen[x][y] = a = 1;
-                find(x + 1, 0);
-                pin[0][y] = pin[1][x + y] = pin[2][NUM - 1 + y - x] = queen[x][y] = 0;
-            }
-        }
-        if (a == 1)
-            find(x + 1, 0);
+        printf("There is not enough time to present any evidence. Drop the charges.\n");
+        return;
     }
-    else
+
+    memset(tab, 0, sizeof(tab));
+    memset(tabcost, 0, sizeof(tabcost));
+    memset(choice, 0, sizeof(choice));
+
+    for (k = 0; k < n; k++)
     {
-        co++;
-        printf("No. %d\n",co);
-        for (a = 0; a < NUM; a++)
+        for (i = cap, j = cap - cost[k]; j >= 0; i--, j--)
         {
-            for (b = 0; b < NUM; b++)
-                printf("%d ", queen[a][b]);
+            t = tab[j] + score[k];
+
+            if (t < tab[i] ||
+                (t == tab[i] && (tabcost[j] + cost[k]) >= tabcost[i]))
+                continue;
+
+            tab[i] = t;
+            tabcost[i] = tabcost[j] + cost[k];
+            choice[i][0] = choice[j][0];
+            choice[i][1] = choice[j][1];
+            choice[i][2] = choice[j][2];
+            choice[i][3] = choice[j][3];
+            choice[i][k >> 5] |= 1U << (k & 31);
+        }
+    }
+
+    for (i = k = 0; i < n; i++)
+        if ((choice[cap][i >> 5] >> (i & 31)) & 1)
+            r[k++] = i;
+
+    qsort(r, k, sizeof(int), &cmp);
+
+    printf("Score  Time  Description\n-----  ----  -----------\n");
+
+    for (i = 0; i < k; i++)
+        printf("%3d%7d   %s\n", score[r[i]], cost[r[i]], name[r[i]]);
+
+    printf("\nTotal score: %d points\n Total time: %d hours\n",
+           tab[cap], tabcost[cap]);
+}
+
+int main()
+{
+    static char buf[1024];
+    int i, t;
+
+    for (scanf("%d", &t); t-- > 0;)
+    {
+        while (gets(buf) && sscanf(buf, "%d", &cap) != 1)
+            ;
+
+        for (i = 0; i < 128; i++)
+            name[i][0] = '\0';
+
+        for (n = 0; gets(buf) && sscanf(buf, "%d %d %[^\n]", &score[n], &cost[n], name[n]) >= 2; n++)
+            ;
+
+        solve();
+
+        if (t > 0)
             printf("\n");
-        }
-        
     }
+
+    return 0;
 }
