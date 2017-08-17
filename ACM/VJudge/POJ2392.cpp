@@ -1,9 +1,9 @@
 #include <iostream>
 #include <algorithm>
-#include <array>
 #include <vector>
 #define K 405
 #define A 40000
+using namespace std;
 struct no
 {
     int h, a;
@@ -14,7 +14,8 @@ struct no
         this->a = y;
     }
 };
-using namespace std;
+
+bool cmp(no a, no b) { return a.a < b.a; }
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -40,14 +41,16 @@ int main()
         }
     }
     int ct = va.size();
-    sort(va.begin(), va.begin() + k, [](no a, no b) { return a.a < b.a; });
+    sort(va.begin(), va.begin() + ct, cmp);
     int dp[A] = {0}, ans = 0;
+    dp[0] = 1;
     for (int i = 0; i < ct; ++i)
-        for (int j = va[k].a; j >= 0; --j)
-        {
-                dp[j] = max(dp[j], dp[j - 1] + va[k].h);
-                ans = max(ans, dp[j]);
-        }
+        for (int j = va[i].a; j >= va[i].h; --j)
+            if (!dp[j] && dp[j - va[i].h])
+            {
+                dp[j] = 1;
+                ans = max(ans, j);
+            }
     cout << ans << endl;
     return 0;
 }
