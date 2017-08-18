@@ -9,17 +9,18 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    for (int a = 1; a < 21; ++a)
+    for (int a = 1; a <= 4; ++a)
     {
-        cout << setw(2) << a << ": ";
-        set<int> te;
-        for (int b = 1; b <= a + 2; ++b)
+        for (int b = 1; b < 5; ++b)
         {
-            // cout << a << "mod " << b << ": " << a % b << endl;
-            te.insert(a % b);
+            for (int c = 1; c < 5; ++c)
+            {
+                for (int d = 1; d < 5; ++d)
+                    cout << a << b << c << d << ",";
+                cout << endl;
+            }
+            cout << endl;
         }
-        for (auto i : te)
-            cout << setw(2) << i << " ";
         cout << endl;
     }
     return 0;
