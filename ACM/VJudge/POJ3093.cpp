@@ -3,6 +3,7 @@
 #include <vector>
 #define VN 35
 #define DN 1005
+#define INF 0x3f3f3f3f
 using namespace std;
 int main()
 {
@@ -15,20 +16,26 @@ int main()
         cout << t << " ";
         int v, d, va[VN];
         cin >> v >> d;
+        int c = d;
         for (int i = 0; i < v; ++i)
+        {
             cin >> va[i];
-        unsigned int dp[DN] = {0}, way[DN] = {0};
-        way[0] = 1;
-        for (int i = 0; i < v; ++i)
-            for (int j = d; j >= va[i]; --j)
-                if (dp[j - va[i]] + va[i] > dp[j])
-                {
-                    dp[j] = dp[j - va[i]] + va[i];
-                    way[j] = way[j - va[i]];
-                }
-                else if (dp[j - va[i]] + va[i] == dp[j])
-                    way[j] += way[j - va[i]];
-        cout << way[d] << endl;
+            c -= va[i];
+        }
+        unsigned int dp[DN] = {0};
+        dp[0] = 1;
+        sort(va, va + v);
+        int ans = (c >= 0);
+        if (va[0] <= d)
+            for (int i = v - 1; i > -1; --i)
+            {
+                if ((c += va[i]) >= 0)
+                    for (int j = max(0, c - va[i] + 1); j <= c; ++j)
+                        ans += dp[j];
+                for (int j = d; j >= va[i]; --j)
+                    dp[j] += dp[j - va[i]];
+            }
+        cout << ans << endl;
     }
     return 0;
 }
