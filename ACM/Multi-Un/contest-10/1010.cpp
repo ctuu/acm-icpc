@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <array>
 #include <set>
-#include <vector>
 using namespace std;
 array<pair<int, int>, 100003> va;
 struct node
@@ -16,8 +15,6 @@ struct node
     }
     friend bool operator<(const node &a, const node &b)
     {
-        if (a.beg != b.beg)
-            return a.beg < b.beg;
         return a.end < b.end;
     }
 };
@@ -31,8 +28,7 @@ int main()
     {
         int n;
         cin >> n;
-        set<node> ar;
-        // array<pair<int, int>, 100003> va;
+        multiset<node> ar;
         for (int i = 0; i < n; ++i)
             cin >> va[i].first >> va[i].second;
         sort(va.begin(), va.begin() + n, [](pair<int, int> a, pair<int, int> b) {
@@ -41,33 +37,26 @@ int main()
             else
                 return a.second < b.second;
         });
-
+        long long ans = 0;
         for (int i = 0; i < n; ++i)
         {
             int &b = va[i].first;
             int &e = va[i].second;
-            if (!ar.size())
-                ar.insert(node(b, e));
+            auto k = ar.upper_bound(node(b, b));
+            if (k == ar.begin())
+            {
+                ans += e - b;
+                ar.insert(node(b,e));
+            }
             else
             {
-                auto k = upper_bound(ar.begin(), ar.end(), node(b, e), [](node a, node b) {
-                    return a.beg < b.end;
-                });
                 --k;
-                // cout << i << " ! " << b << " " << k->end << endl;
-                if (k->end <= b)
-                {
-                    ar.insert(node(k->beg, e));
-                    ar.erase(k);
-                    continue;
-                }
-                else
-                    ar.insert(node(b, e));
+                ans += e - k->end;
+                int temp = k->beg;
+                ar.erase(k);
+                ar.insert(node(temp, e));
             }
         }
-        int ans = 0;
-        for (auto i : ar)
-            ans += i.end - i.beg;
         cout << ar.size() << " " << ans << endl;
     }
     return 0;
