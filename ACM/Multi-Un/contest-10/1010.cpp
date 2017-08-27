@@ -4,20 +4,7 @@
 #include <set>
 using namespace std;
 array<pair<int, int>, 100003> va;
-struct node
-{
-    int beg, end;
-    node() = default;
-    node(int a, int b)
-    {
-        this->beg = a;
-        this->end = b;
-    }
-    friend bool operator<(const node &a, const node &b)
-    {
-        return a.end < b.end;
-    }
-};
+
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -28,7 +15,7 @@ int main()
     {
         int n;
         cin >> n;
-        multiset<node> ar;
+        multiset<int> ar;
         for (int i = 0; i < n; ++i)
             cin >> va[i].first >> va[i].second;
         sort(va.begin(), va.begin() + n, [](pair<int, int> a, pair<int, int> b) {
@@ -42,19 +29,18 @@ int main()
         {
             int &b = va[i].first;
             int &e = va[i].second;
-            auto k = ar.upper_bound(node(b, b));
+            auto k = ar.upper_bound(b);
             if (k == ar.begin())
             {
                 ans += e - b;
-                ar.insert(node(b,e));
+                ar.insert(e);
             }
             else
             {
                 --k;
-                ans += e - k->end;
-                int temp = k->beg;
+                ans += e - *k;
                 ar.erase(k);
-                ar.insert(node(temp, e));
+                ar.insert(e);
             }
         }
         cout << ar.size() << " " << ans << endl;
