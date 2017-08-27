@@ -4,7 +4,23 @@
 #include <set>
 #include <vector>
 using namespace std;
-
+array<pair<int, int>, 100003> va;
+struct node
+{
+    int beg, end;
+    node() = default;
+    node(int a, int b)
+    {
+        this->beg = a;
+        this->end = b;
+    }
+    friend bool operator<(const node &a, const node &b)
+    {
+        if (a.beg != b.beg)
+            return a.beg < b.beg;
+        return a.end < b.end;
+    }
+};
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -15,9 +31,8 @@ int main()
     {
         int n;
         cin >> n;
-        vector<set<int>> ar;
-        array<pair<int, int>, 100003> va;
-        // ar.resize(100000);
+        set<node> ar;
+        // array<pair<int, int>, 100003> va;
         for (int i = 0; i < n; ++i)
             cin >> va[i].first >> va[i].second;
         sort(va.begin(), va.begin() + n, [](pair<int, int> a, pair<int, int> b) {
@@ -26,44 +41,33 @@ int main()
             else
                 return a.second < b.second;
         });
+
         for (int i = 0; i < n; ++i)
         {
             int &b = va[i].first;
             int &e = va[i].second;
-            bool isa = 0;
             if (!ar.size())
-            {
-                set<int> t;
-                t.insert(b);
-                t.insert(e);
-                ar.push_back(t);
-            }
+                ar.insert(node(b, e));
             else
             {
-                sort(ar.begin(), ar.end(), [](set<int> a, set<int> b) {
-                    return *a.rbegin() > *b.rbegin();
+                auto k = upper_bound(ar.begin(), ar.end(), node(b, e), [](node a, node b) {
+                    return a.beg < b.end;
                 });
-                for (auto &i : ar)
+                --k;
+                // cout << i << " ! " << b << " " << k->end << endl;
+                if (k->end <= b)
                 {
-                    if (*i.rbegin() <= b)
-                    {
-                        i.insert(e);
-                        isa = 1;
-                        break;
-                    }
+                    ar.insert(node(k->beg, e));
+                    ar.erase(k);
+                    continue;
                 }
-                if (!isa)
-                {
-                    set<int> t;
-                    t.insert(b);
-                    t.insert(e);
-                    ar.push_back(t);
-                }
+                else
+                    ar.insert(node(b, e));
             }
         }
         int ans = 0;
         for (auto i : ar)
-            ans += *i.rbegin() - *i.begin();
+            ans += i.end - i.beg;
         cout << ar.size() << " " << ans << endl;
     }
     return 0;
