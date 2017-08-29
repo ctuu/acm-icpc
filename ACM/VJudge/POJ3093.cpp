@@ -19,7 +19,7 @@ int main()
         long long dp[1002];
         int sum = 0;
         long long ans = 0;
-        for (int i = 0; i < v; ++i)
+        for (int i = 0; i < v; ++i) // 剩余物品中最小的
         {
             for (int j = 0; j < 1002; ++j)
                 dp[j] = 0;
