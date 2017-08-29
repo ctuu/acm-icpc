@@ -1,6 +1,5 @@
 #include <iostream>
 #include <algorithm>
-#include <array>
 #include <vector>
 using namespace std;
 int main()
@@ -9,30 +8,32 @@ int main()
     cin.tie(0);
     int n;
     cin >> n;
-    array<int, 30> ar;
-    array<long long, 1002> dp;
-    while (n--)
+    int ar[30];
+    for (int t = 1; t <= n; ++t)
     {
         int v, d;
         cin >> v >> d;
         for (int i = 0; i < v; ++i)
             cin >> ar[i];
-        sort(ar.begin(), ar.begin() + v);
-        dp.fill(0);
+        sort(ar, ar + v);
+        long long dp[1002];
+        int sum = 0;
+        long long ans = 0;
         for (int i = 0; i < v; ++i)
         {
-            for (int j = d; j > ar[i]; --j)
-                dp[j] += dp[j - ar[i]];
-            ++dp[ar[i]];
+            for (int j = 0; j < 1002; ++j)
+                dp[j] = 0;
+            dp[sum] = 1;
+            for (int j = i + 1; j < v; ++j)
+                for (int k = d; k >= ar[j] + sum; --k)
+                    dp[k] += dp[k - ar[j]];
+            for (int j = d; j > max(d - ar[i], 0); --j)
+                if (j >= sum)
+                    ans += dp[j];
+            sum += ar[i];
         }
-        long long ans = 0;
-        // for (int i = d; i > -1; --i)
-        // {
-        //     cout << dp[i] << " ";
-        // }
-        for (int i = d; i >= d - ar[0]; --i)
-            ans += dp[i];
-        cout << ans << endl;
+        ans += (d > sum);
+        cout << t << " " << ans << endl;
     }
     return 0;
 }

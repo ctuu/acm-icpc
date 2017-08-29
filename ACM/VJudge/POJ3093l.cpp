@@ -1,9 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#define VN 35
-#define DN 1005
-#define INF 0x3f3f3f3f
 using namespace std;
 int main()
 {
@@ -11,31 +8,32 @@ int main()
     cin.tie(0);
     int n;
     cin >> n;
+    int ar[30];
     for (int t = 1; t <= n; ++t)
     {
-        cout << t << " ";
-        int v, d, va[VN];
+        int v, d, sum = 0, f[1005];
         cin >> v >> d;
-        int c = d;
         for (int i = 0; i < v; ++i)
         {
-            cin >> va[i];
-            c -= va[i];
+            cin >> ar[i];
+            sum += ar[i];
         }
-        unsigned int dp[DN] = {0};
-        dp[0] = 1;
-        sort(va, va + v);
-        int ans = (c >= 0);
-        if (va[0] <= d)
-            for (int i = v - 1; i > -1; --i)
-            {
-                if ((c += va[i]) >= 0)
-                    for (int j = max(0, c - va[i] + 1); j <= c; ++j)
-                        ans += dp[j];
-                for (int j = d; j >= va[i]; --j)
-                    dp[j] += dp[j - va[i]];
-            }
-        cout << ans << endl;
+        sort(ar, ar + v);
+        long long ans = 0;
+        for (int i = 0; i < 1005; ++i)
+            f[i] = 0;
+        f[0] = 1;
+        ans += (d > sum);
+        for (int i = v - 1; i > -1; --i)
+        {
+            sum -= ar[i];
+            for (int j = d - sum; j >= max(d - sum - ar[i] + 1, 0); --j)
+                ans += f[j];
+            for (int j = d; j >= max(ar[i], 0); --j)
+                f[j] += f[j - ar[i]];
+        }
+        ans -= (d < ar[0]);
+        cout << t << " " << ans << endl;
     }
     return 0;
 }
