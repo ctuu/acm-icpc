@@ -1,9 +1,7 @@
 #include <iostream>
 #include <algorithm>
+#include <array>
 #include <vector>
-#define VN 35
-#define DN 1005
-#define INF 0x3f3f3f3f
 using namespace std;
 int main()
 {
@@ -11,30 +9,29 @@ int main()
     cin.tie(0);
     int n;
     cin >> n;
-    for (int t = 1; t <= n; ++t)
+    array<int, 30> ar;
+    array<long long, 1002> dp;
+    while (n--)
     {
-        cout << t << " ";
-        int v, d, va[VN];
+        int v, d;
         cin >> v >> d;
-        int c = d;
+        for (int i = 0; i < v; ++i)
+            cin >> ar[i];
+        sort(ar.begin(), ar.begin() + v);
+        dp.fill(0);
         for (int i = 0; i < v; ++i)
         {
-            cin >> va[i];
-            c -= va[i];
+            for (int j = d; j > ar[i]; --j)
+                dp[j] += dp[j - ar[i]];
+            ++dp[ar[i]];
         }
-        unsigned int dp[DN] = {0};
-        dp[0] = 1;
-        sort(va, va + v);
-        int ans = (c >= 0);
-        if (va[0] <= d)
-            for (int i = v - 1; i > -1; --i)
-            {
-                if ((c += va[i]) >= 0)
-                    for (int j = max(0, c - va[i] + 1); j <= c; ++j)
-                        ans += dp[j];
-                for (int j = d; j >= va[i]; --j)
-                    dp[j] += dp[j - va[i]];
-            }
+        long long ans = 0;
+        // for (int i = d; i > -1; --i)
+        // {
+        //     cout << dp[i] << " ";
+        // }
+        for (int i = d; i >= d - ar[0]; --i)
+            ans += dp[i];
         cout << ans << endl;
     }
     return 0;
