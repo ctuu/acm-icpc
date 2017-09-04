@@ -4,8 +4,8 @@
 #define SH 100000
 #define INF 0x3f3f3f3f
 using namespace std;
-bool ds[100000 + SH];
-int df[100000 + SH];
+int ds[100005 + SH];
+int df[100005 + SH];
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -55,7 +55,7 @@ int main()
     int ans = 0;
     for (int i = 0; i < ct; ++i)
     {
-        for (int j = 0; j <= SH + sos; ++j)
+        for (int j = SH; j <= SH + sos; ++j)
             df[j] = -INF;
         df[SH] = 0;
         for (int j = 0; j < n; ++j)
