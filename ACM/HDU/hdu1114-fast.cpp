@@ -1,4 +1,6 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 #define E 10005
 #define F 10005
 #define N 505
@@ -35,8 +37,10 @@ int main()
             cin >> p >> w;
             va.push_back(no(p, w));
         }
-        array<int, F> dp;
-        dp.fill(INF);
+        // array<int, F> dp;
+        int dp[F];
+        for (int i = 0; i < F; ++i)
+            dp[i] = INF;
         dp[0] = 0;
         int ct = va.size();
         for (int i = 0; i < ct; ++i)
