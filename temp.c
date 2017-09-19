@@ -1,6 +1,8 @@
 #include <stdio.h>
 int main(void)
 {
-    printf("Hello World\n");
+    long long a, b;
+    while(~scanf("%lld %lld", &a, &b))
+        printf("%lld\n", a + b);
     return 0;
 }
