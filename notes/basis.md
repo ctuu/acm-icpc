@@ -60,8 +60,8 @@ function add(x, y) {
 ```
 
 ## 任务列表
-- [x] this is a complete item
-- [ ] this is an incomplete item
+* [X] ~~*this is a complete item*~~
+* [ ] this is an incomplete item
 
 ## 表格
 First Header | Second Header
@@ -74,7 +74,6 @@ Content in the first column | Content in the second column
 
 ##下标
 H~2~O
-
 ## 脚注
 Content [^1]
 
