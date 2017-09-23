@@ -15,7 +15,7 @@
 状态压缩 + 01 背包, 这题用到状态压缩，还有两次背包，是个不错的题
 * [X] ~~*poj 1837 Balance*~~
 这题也算是 01 背包常见的类形题吧
-* [ ] poj 1948 Triangular Pastures
+* [X] ~~*poj 1948 Triangular Pastures*~~
 二维 01 背包，01 背包拓展
 
 ## 完全背包
@@ -47,7 +47,7 @@
 分组背包入门题
 * [X] ~~*hdu 3033 I love sneakers!*~~
 分组背包，每组至少取 1 个
-* [ ] hdu 3496 Watch The Movie
+* [X] ~~*hdu 3496 Watch The Movie*~~V
 普通的二维背包
 * [X] ~~*hdu 3535 AreYouBusy*~~
 各种分组背包，挺全的一道题
