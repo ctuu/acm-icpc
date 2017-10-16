@@ -1,8 +1,6 @@
 #include <stdio.h>
 int main()
 {
-    int a, b;
-    while (scanf("%d%d", &a, &b) == 2)
-        printf("%d", a+b);
+    printf("Hello World\n");
     return 0;
 }

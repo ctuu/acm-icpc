@@ -1,7 +1,7 @@
 #include <stdio.h>
 #define NU 437338199
 #define MPR 1000000010
-_Bool prim[1000000010] = {0};
+_Bool prim[10000010] = {0};
 void mpn(void);
 int main(void)
 {
@@ -16,11 +16,11 @@ int main(void)
 void mpn(void)
 {
     long long i, j;
-    for (i = 2; i < 400000010; ++i)
+    for (i = 2; i < 4000000; ++i)
     {
         if (prim[i] == 1)
             continue;
-        for (j = 2 * i; j < 800000010; j += i)
+        for (j = 2 * i; j < 8000010; j += i)
             prim[j] = 1;
     }
 }
