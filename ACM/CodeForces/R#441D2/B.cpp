@@ -13,9 +13,9 @@ int main()
     int n, k, m, tmp;
     cin >> n >> k >> m;
     array<int, MAM> var;
+    var.fill(0);
     map<int, int> mar;
     set<int> ar;
-    var.fill(0);
     for (int i = 0; i < n; ++i)
     {
         cin >> tmp;
@@ -24,9 +24,9 @@ int main()
     }
     for (auto i : ar)
         var[i % m] += mar[i];
-    int sum = 0, tg;
+    int tg;
     bool fl = 0;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i <= m; ++i)
         if (var[i] >= k)
         {
             fl = 1;
