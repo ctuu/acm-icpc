@@ -7,25 +7,33 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n;
-    array<int, 102> ar;
-    int j = -1, k = -1, l = -1;
+    int n, mak = 0;
+    bool fl = 1;
     cin >> n;
+    array<int, 102> ar;
     for (int i = 0; i < n; ++i)
         cin >> ar[i];
     for (int i = 1; i < n; ++i)
-        if (ar[i] <= ar[i - 1])
+        switch (mak)
         {
-            j=i-1;
+        case 0:
+            if (ar[i] < ar[i - 1])
+                mak = 1;
+            if (ar[i] == ar[i - 1])
+                mak = 2;
+            break;
+        case 1:
+            if (ar[i] >= ar[i - 1])
+                fl = 0;
+            break;
+        case 2:
+            if (ar[i] < ar[i - 1])
+                mak = 1;
+            if (ar[i] > ar[i - 1])
+                fl = 0;
             break;
         }
-    for (int i = 1; i < n; ++i)
-        if (ar[i] > ar[i - 1])
-        {
-            i = j;
-            break;
-        }
-    if (!ua)
+    if (fl)
         cout << "Yes";
     else
         cout << "No";
