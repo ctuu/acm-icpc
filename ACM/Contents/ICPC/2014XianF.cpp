@@ -47,10 +47,10 @@ int main()
     {
         cin >> n >> m >> k;
         LL ans = 0;
-        for (int i = 0; i < k - 1; ++i)
+        for (int i = k, sg=1; i >= 1; --i, sg = -sg)
         {
-            LL tmp = (Comb(k, i) * poww(k - i - 1, n - 1) % mod) * (k - i) % mod;
-            if (i & 1)
+            LL tmp = (Comb(k, i) * poww(i - 1, n - 1) % mod) * i % mod;
+            if (sg == -1)
                 ans = (ans - tmp + mod) % mod;
             else
                 ans = (ans + tmp) % mod;
