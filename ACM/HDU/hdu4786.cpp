@@ -3,17 +3,16 @@
 #include <iostream>
 #include <queue>
 #include <vector>
-#define MN 100010
 using namespace std;
-#define G vector<vector<Edge>>
+#define G array<vector<Edge>, MN>
+const int MN = 1e5 + 7;
 int ct = 0;
-int ct2 = 0;
 struct Edge
 {
     int v;
-    bool c;
+    int c;
     Edge() = default;
-    Edge(int v, bool c)
+    Edge(int v, int c)
     {
         this->v = v;
         this->c = c;
@@ -27,6 +26,7 @@ struct Edge
         return a.c < b.c;
     }
 };
+G gr;
 int mst(G &gr);
 int mst2(G &gr);
 int main()
@@ -42,28 +42,34 @@ int main()
     for (int t = 1; t <= T; ++t)
     {
         cin >> n >> m;
-        G gr;
-        gr.resize(n);
+        for (int i = 0; i <= n; i++)
+            gr[i].clear();
+        // gr.resize(n);
         int u, v;
         bool c, fl = 0;
         for (int i = 0; i < m; ++i)
         {
             cin >> u >> v >> c;
-            gr[u - 1].push_back(Edge(v - 1, c));
-            gr[v - 1].push_back(Edge(u - 1, c));
+            gr[u].push_back(Edge(v, c));
+            gr[v].push_back(Edge(u, c));
         }
         ct = 1;
-        ct2 = 1;
-        int a1 = mst(gr);
-        int a2 = mst2(gr);
         cout << "Case #" << t << ": ";
+        int a1 = mst(gr);
+        if (ct != n)
+        {
+            cout << "No" << endl;
+            continue;
+        }
+        int a2 = mst2(gr);
+        // cout <<a1 << " " << a2<<endl;
         for (int i = 1; i <= 33; ++i)
             if (fib[i] <= a1 && fib[i] >= a2)
             {
                 fl = 1;
                 break;
             }
-        if (fl && ct == ct2 && ct == n)
+        if (fl)
             cout << "Yes" << endl;
         else
             cout << "No" << endl;
@@ -77,8 +83,8 @@ int mst(G &gr)
     priority_queue<Edge> pq;
     array<bool, MN> mrk;
     mrk.fill(0);
-    mrk[0] = 1;
-    for (auto e : gr[0])
+    mrk[1] = 1;
+    for (auto e : gr[1])
         pq.push(e);
     while (!pq.empty())
     {
@@ -88,14 +94,11 @@ int mst(G &gr)
         if (mrk[v])
             continue;
         sum += e.c;
-        if (!mrk[v])
-        {
-            ++ct;
-            mrk[v] = 1;
-            for (auto e : gr[v])
-                if (!mrk[e.v])
-                    pq.push(e);
-        }
+        ++ct;
+        mrk[v] = 1;
+        for (auto e : gr[v])
+            if (!mrk[e.v])
+                pq.push(e);
     }
     return sum;
 }
@@ -103,12 +106,12 @@ int mst(G &gr)
 int mst2(G &gr)
 {
     int sum = 0;
-    priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
+    priority_queue<Edge> pq;
     array<bool, MN> mrk;
     mrk.fill(0);
-    mrk[0] = 1;
-    for (auto e : gr[0])
-        pq.push(e);
+    mrk[1] = 1;
+    for (auto e : gr[1])
+        pq.push(Edge(e.v, -e.c));
     while (!pq.empty())
     {
         Edge e = pq.top();
@@ -116,15 +119,11 @@ int mst2(G &gr)
         int v = e.v;
         if (mrk[v])
             continue;
-        sum += e.c;
-        if (!mrk[v])
-        {
-            ++ct2;
-            mrk[v] = 1;
-            for (auto e : gr[v])
-                if (!mrk[e.v])
-                    pq.push(e);
-        }
+        sum -= e.c;
+        mrk[v] = 1;
+        for (auto e : gr[v])
+            if (!mrk[e.v])
+                pq.push(Edge(e.v, -e.c));
     }
     return sum;
 }
