@@ -9,12 +9,24 @@ using namespace std;
 int ct = 0;
 struct Edge
 {
-    int v, c;
+    int u, v, c;
     Edge() = default;
-    Edge(int v, int c)
+    Edge(int u, int v, int c)
     {
+        this->u = u;
         this->v = v;
         this->c = c;
+    }
+    int eir()
+    {
+        return u;
+    }
+    int oth(int x)
+    {
+        if (x == this->u)
+            return v;
+        else
+            return u;
     }
     friend bool operator>(const Edge &a, const Edge &b)
     {
@@ -39,16 +51,10 @@ int main()
         for (int i = 0; i < m; ++i)
         {
             cin >> u >> v >> c;
-            gr[u - 1].push_back(Edge(v - 1, c));
-            gr[v - 1].push_back(Edge(u - 1, c));
+            gr[u - 1].push_back(Edge(u - 1, v - 1, c));
         }
-        ct = 1;
         int ans = mst(gr);
-        // cout << ct << endl;
-        if (ct == n)
             cout << ans << endl;
-        else
-            cout << "?" << endl;
     }
     return 0;
 }
@@ -67,16 +73,23 @@ int mst(G &gr)
 
         Edge e = pq.top();
         pq.pop();
-        int v = e.v;
-        if (mrk[v])
+        int v = e.eir();
+        int w = e.oth(v);
+        if (mrk[v] && mrk[w])
             continue;
         sum += e.c;
         if (!mrk[v])
         {
-            ++ct;
             mrk[v] = 1;
             for (auto e : gr[v])
-                if (!mrk[e.v])
+                if (!mrk[e.oth(v)])
+                    pq.push(e);
+        }
+        if (!mrk[w])
+        {
+            mrk[w] = 1;
+            for (auto e : gr[w])
+                if (!mrk[e.oth(w)])
                     pq.push(e);
         }
     }
