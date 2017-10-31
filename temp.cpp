@@ -1,32 +1,21 @@
+#include <iostream>
 #include <algorithm>
 #include <array>
-#include <iostream>
 #include <vector>
 using namespace std;
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--)
+    array<bool, 100005> ar;
+    ar.fill(0);
+    for (int a = 1, b = 1; a < 100005 && b < 100005; swap(a, b))
     {
-        int mm = 0, cm = 0;
-        int n, tmp, mm1;
-        cin >> n;
-        for (int i = 0; i < n; ++i)
-        {
-            cin >> tmp;
-            if (mm != tmp)
-            {
-                mm1 = mm;
-                mm = max(tmp, mm);
-                cm = mm1 == mm ? cm : mm1;
-            }
-            if (mm == tmp)
-                cm = mm;
-        }
-        cout << cm << " " << mm << endl;
+        ar[a] = 1;
+        a += b;
     }
+    for(int i = 0; i < 20;++i)
+    if(ar[i])
+    cout << i << " ";
     return 0;
 }
