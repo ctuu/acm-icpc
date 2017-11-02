@@ -26,10 +26,7 @@ int main()
 	    }
 	    roads.resize(n);
 	    for (auto &i: roads)
-		{
 			cin >> i.fo >> i.to >> i.cost;
-
-		}
 	   sort(roads.begin(), roads.end(), comp_path);
 	   long long sum = 0;
 	    for (int i = 0; i < n; ++i)
