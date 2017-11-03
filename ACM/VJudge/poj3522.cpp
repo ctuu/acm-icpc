@@ -19,6 +19,7 @@ struct Edge
     long long c;
 } gr[N];
 bool cmp(Edge &a, Edge &b) { return a.c < b.c; }
+long long mst(G &gr);
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -28,31 +29,19 @@ int main()
     {
         for (int i = 0; i < m; ++i)
             cin >> gr[i].u >> gr[i].v >> gr[i].c;
-        sort(gr, gr + n, cmp);
-        cout << endl;
-        for(int i = 0; i <m; ++i)
-        cout << gr[i].u << " " << gr[i].v << " " << gr[i].c << endl;
+        sort(gr, gr + m, cmp);
         long long ans = INF;
-        for (int i = 0; i < m; ++i)
+        vector<Edge> g;
+        for (int j = 0; j < m; ++j)
         {
-            for (int j = i + 1; j < m; ++j)
+            g.push_back(gr[j]);
+            long long tmp = mst(g);
+            while (fl)
             {
-                for (int i = 0; i < N; ++i)
-                    p[i] = i;
-                long long mam = 0, ct = 0;
-                for (int k = i; k <= j; ++k)
-                {
-                    Edge e = gr[k];
-                    int a = find(e.u), b = find(e.v);
-                    if (a != b)
-                    {
-                        p[a] = b;
-                        ++ct;
-                        mam = max(mam, e.c);
-                    }
-                }
-                if (ct == n - 1)
-                    ans = min(ans, gr[j].c - gr[i].c);
+                ans = min(ans, tmp);
+                fl = 0;
+                g.erase(g.begin());
+                tmp = mst(g);
             }
         }
         if (ans == INF)
@@ -60,4 +49,24 @@ int main()
         cout << ans << endl;
     }
     return 0;
+}
+
+long long mst(G &gr)
+{
+    for (int i = 0; i < N; ++i)
+        p[i] = i;
+    int si = gr.size(), ct = 0;
+    for (int i = 0; i < si; ++i)
+    {
+        Edge e = gr[i];
+        int a = find(e.u), b = find(e.v);
+        if (a != b)
+        {
+            p[a] = b;
+            ++ct;
+        }
+    }
+    if (ct == n - 1)
+        fl = 1;
+    return gr[si - 1].c - gr[0].c;
 }
