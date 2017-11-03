@@ -2,17 +2,13 @@
 #include <algorithm>
 #include <array>
 #include <vector>
+#define INF 0x3f3f3f3f
 using namespace std;
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int fib[35];
-    fib[0] = 0;
-    fib[1] = 1;
-    for (int i = 2; i <= 31; i++)
-        fib[i] = fib[i - 2] + fib[i - 1];
-    for(int i = 0; i <= 31;++i)
-        cout << fib[i] << " ";
+    int a = 3;
+    cout << (a == INF? 3: 4) << endl;
     return 0;
 }
