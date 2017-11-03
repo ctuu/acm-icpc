@@ -6,30 +6,6 @@
 using namespace std;
 #define G pair<vector<Edge>, int>
 const int N = 1e5;
-int ct = 0;
-struct Edge
-{
-    int u, v, c;
-    Edge(int u, int v, int c)
-    {
-        this->u = u;
-        this->v = v;
-        this->c = c;
-    }
-    int oth(int x)
-    {
-        return x == u ? v : u;
-    }
-    friend bool operator>(const Edge &a, const Edge &b)
-    {
-        return a.c > b.c;
-    }
-    friend bool operator<(const Edge &a, const Edge &b)
-    {
-        return a.c < b.c;
-    }
-};
-
 struct UF
 {
     array<int, N> p;
@@ -49,17 +25,25 @@ struct UF
         p[i] = j;
     }
 };
+struct Edge
+{
+    int u, v, c;
+    Edge(int u, int v, int c)
+    {
+        this->u = u;
+        this->v = v;
+        this->c = c;
+    }
+};
 
 int mst(G &gr);
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int T, n, m;
-    cin >> T;
-    for (int t = 1; t <= T; ++t)
+    int n, m;
+    while (cin >> n >> m)
     {
-        cin >> n >> m;
         G gr;
         gr.second = n;
         int u, v, c;
@@ -76,22 +60,19 @@ int main()
 int mst(G &gr)
 {
     UF uf = UF();
-    priority_queue<Edge> pq;
     int sum = 0, ct = 0;
-    for (auto i : gr.first)
-        pq.push(i);
-    int si = gr.second;
-    while (!pq.empty() && ct < si - 1)
+    vector<Edge> pa = gr.first;
+    sort(pa.begin(), pa.end(), [](Edge &a, Edge &b) { return a.c < b.c; });
+    int si = pa.size();
+    for (int i = 0; i < si; ++i)
     {
-        Edge e = pq.top();
-        pq.pop();
-        int u = e.u;
-        int v = e.oth(u);
+        Edge e = pa[i];
+        int u = e.u, v = e.v;
         if (uf.find(u) == uf.find(v))
             continue;
         uf.joint(u, v);
         ++ct;
-        ++sum;
+        sum += e.c;
     }
     return sum;
 }
