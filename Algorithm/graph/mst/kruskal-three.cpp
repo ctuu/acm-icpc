@@ -28,12 +28,7 @@ struct UF
 struct Edge
 {
     int u, v, c;
-    Edge(int u, int v, int c)
-    {
-        this->u = u;
-        this->v = v;
-        this->c = c;
-    }
+    Edge(int u, int v, int c) : u(u), v(v), c(c) {}
 };
 
 int mst(G &gr);
@@ -50,7 +45,7 @@ int main()
         for (int i = 0; i < m; ++i)
         {
             cin >> u >> v >> c;
-            gr.first.push_back(Edge(u - 1, v - 1, c));
+            gr.first.push_back(Edge(u, v, c));
         }
         cout << mst(gr) << endl;
     }

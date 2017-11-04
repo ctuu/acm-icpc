@@ -7,7 +7,7 @@
 using namespace std;
 int main()
 {
-    stringstream foo;
+    // stringstream foo;
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     vector<int> se;
