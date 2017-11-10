@@ -5,42 +5,42 @@
 #include <vector>
 using namespace std;
 #define N 20000
-using G = vector<vector<int>>;
-array<int, N> dfn, low, belong;
-array<int, 100005> ans;
-vector<pair<int, int>> edges;
+#define M 100006
+using G = vector<vector<pair<int, int>>>;
+array<int, N + 3> dfn, low, belong;
+array<int, M> ans;
 stack<int> stk;
-int cnt, ct;
+int tot, ct;
 void tarjan(G &gr, int u, int fa)
 {
-    dfn[u] = low[u] = ++cnt;
+    dfn[u] = low[u] = ++tot;
     for (auto k : gr[u])
     {
-        int v = (u == edges[k].first) ? edges[k].second : edges[k].first;
+        int v = k.first, id = k.second;
         if (v == fa)
             continue;
         if (!dfn[v])
         {
-            stk.push(k);
+            stk.push(id);
             tarjan(gr, v, u);
-            low[u] = min(low[v], low[u]);
+            low[u] = min(low[u], low[v]);
             if (low[v] >= dfn[u])
             {
                 ++ct;
-                int e, mim = 100006;
+                int e, mim = M;
                 do
                 {
                     e = stk.top();
                     stk.pop();
                     belong[e] = ct;
                     mim = min(mim, e);
-                } while (e != k);
+                } while (e != id);
                 ans[ct] = mim;
             }
         }
         else if (dfn[v] < dfn[u])
         {
-            stk.push(k);
+            stk.push(id);
             low[u] = min(low[u], dfn[v]);
         }
     }
@@ -56,16 +56,14 @@ int main()
     low.fill(0);
     belong.fill(0);
     ans.fill(0);
-    ct = cnt = 0;
+    ct = tot = 0;
     G gr;
     gr.resize(n + 1);
-    edges.push_back(make_pair(0, 0));
     for (int i = 1; i <= m; ++i)
     {
         cin >> a >> b;
-        edges.push_back(make_pair(a, b));
-        gr[a].push_back(i);
-        gr[b].push_back(i);
+        gr[a].push_back(make_pair(b, i));
+        gr[b].push_back(make_pair(a, i));
     }
     tarjan(gr, 1, -1);
     cout << ct << endl;
