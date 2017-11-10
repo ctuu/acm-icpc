@@ -16,47 +16,8 @@ int main()
     {
         mrk.fill(0);
         int n, a, b, ti = 0;
-        bool fl = 0;
         cin >> n >> a >> b;
-        mrk[a] = mrk[b] = 1;
-        vector<int> ar;
-        ar.push_back(a);
-        ar.push_back(b);
-        do
-        {
-            fl = 0;
-            int re;
-            for (auto i : ar)
-            {
-                if (mrk[i])
-                {
-                    for (auto j : ar)
-                        if (i != j && mrk[j])
-                        {
-                            re = i + j;
-                            if (re <= n && !mrk[re])
-                            {
-                                ++ti;
-                                mrk[re] = 1;
-                                fl = 1;
-                                ar.push_back(re);
-                                break;
-                            }
-                            re = abs(i - j);
-                            if (!mrk[re])
-                            {
-                                ++ti;
-                                mrk[re] = 1;
-                                fl = 1;
-                                ar.push_back(re);
-                                break;
-                            }
-                        }
-                }
-                if (fl)
-                    break;
-            }
-        } while (fl);
+        ti = n / __gcd(a, b);
         cout << "Case #" << t << ": ";
         if (ti & 1)
             cout << "Yuwgna" << endl;
