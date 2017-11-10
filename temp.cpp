@@ -1,67 +1,77 @@
-void dfs(int u)
+#include <algorithm>
+#include <array>
+#include <iostream>
+#include <stack>
+#include <vector>
+using namespace std;
+#define N 100005
+using G = vector<vector<int>>;
+array<int, N> dfn, low, fa, belong;
+array<int, N> ans;
+vector<pair<int, int>> edges;
+stack<int> stk;
+int cnt, ct;
+void tarjan(G &gr, int u)
 {
-    //记录dfs遍历次序
-    static int counter = 0;
-
-    //记录节点u的子树数
-    int children = 0;
-
-    ArcNode *p = graph[u].firstArc;
-    visit[u] = 1;
-
-    //初始化dfn与low
-    dfn[u] = low[u] = ++counter;
-
-    for (; p != NULL; p = p->next)
+    dfn[u] = low[u] = ++cnt;
+    for (auto k : gr[u])
     {
-        int v = p->adjvex;
-        if (edge(u, v) 已经被标记)
-            continue;
-
-        //节点v未被访问，则(u,v)为树边
-        if (!visit[v])
+        int v = (u == edges[k].first) ? edges[k].second : edges[k].first;
+        if(v == fa[u]) continue;
+        if (!dfn[v])
         {
-            children++;
-            parent[v] = u;
-            edgeStack[top++] = edge(u, v); // 将边入栈
-            dfs(v);
-
-            low[u] = min(low[u], low[v]);
-
-            //case (1)
-            if (parent[u] == NIL && children > 1)
+            fa[v] = u;
+            stk.push(k); //save index
+            tarjan(gr, v);
+            low[u] = min(low[v], low[u]);
+            if (low[v] >= dfn[u])
             {
-                printf("articulation point: %d\n", u);
-                // mark edge
-                // 将边出栈，直到当前边出栈为止，这些边标记为同一个组
+                ++ct;
+                ans[ct] = N;
+                int e;
                 do
                 {
-                    nowEdge = edgeStack[top];
-                    top--;
-                    // 标记nowEdge
-                } while (nowEdge != edge(u, v))
-            }
-
-            //case (2)
-            if (parent[u] != NIL && low[v] >= dfn[u])
-            {
-                printf("articulation point: %d\n", u);
-                // mark edge
-                // 将边出栈，直到当前边出栈为止，这些边标记为同一个组
-                do
-                {
-                    nowEdge = edgeStack[top];
-                    top--;
-                    // 标记nowEdge
-                } while (nowEdge != edge(u, v))
+                    e = stk.top();
+                    stk.pop();
+                    belong[e] = ct;
+                    ans[ct] = min(ans[ct], e);
+                } while (e != k);
             }
         }
-
-        //节点v已访问，则(u,v)为回边
-        else if (v != parent[u])
+        else if (dfn[v] < dfn[u])
         {
-            edgeStack[top++] = edge(u, v);
             low[u] = min(low[u], dfn[v]);
+            stk.push(k);
         }
     }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int n, m, a, b;
+    cin >> n >> m;
+    dfn.fill(0);
+    low.fill(0);
+    fa.fill(0);
+    belong.fill(0);
+    ans.fill(0);
+    ct = cnt = 0;
+    G gr;
+    gr.resize(n + 1);
+    edges.push_back(make_pair(0, 0));
+    for (int i = 1; i <= m; ++i)
+    {
+        cin >> a >> b;
+        edges.push_back(make_pair(a, b));
+        gr[a].push_back(i);
+        gr[b].push_back(i);
+    }
+    tarjan(gr, 1);
+    cout << ct << endl;
+    for (int i = 1; i <= m; ++i)
+        cout << ans[belong[i]] << " ";
+    cout << endl;
+    return 0;
 }

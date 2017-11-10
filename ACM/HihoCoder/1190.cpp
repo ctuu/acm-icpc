@@ -5,43 +5,44 @@
 #include <vector>
 using namespace std;
 #define N 20000
-#define M 100006
-using G = vector<vector<pair<int, int>>>;
-array<int, N + 3> dfn, low, belong;
-array<int, M> ans;
+#define M 100005
+using G = vector<vector<int>>;
+array<int, N + 5> dfn, low, fa;
+array<int, M> belong, ans;
+vector<pair<int, int>> edges;
 stack<int> stk;
-int tot, ct;
-void tarjan(G &gr, int u, int fa)
+int cnt, ct;
+void tarjan(G &gr, int u)
 {
-    dfn[u] = low[u] = ++tot;
+    dfn[u] = low[u] = ++cnt;
     for (auto k : gr[u])
     {
-        int v = k.first, id = k.second;
-        if (v == fa)
-            continue;
+        int v = (u == edges[k].first) ? edges[k].second : edges[k].first;
+        if(v == fa[u]) continue;
         if (!dfn[v])
         {
-            stk.push(id);
-            tarjan(gr, v, u);
-            low[u] = min(low[u], low[v]);
+            fa[v] = u;
+            stk.push(k);
+            tarjan(gr, v);
+            low[u] = min(low[v], low[u]);
             if (low[v] >= dfn[u])
             {
                 ++ct;
-                int e, mim = M;
+                ans[ct] = M;
+                int e;
                 do
                 {
                     e = stk.top();
                     stk.pop();
                     belong[e] = ct;
-                    mim = min(mim, e);
-                } while (e != id);
-                ans[ct] = mim;
+                    ans[ct] = min(ans[ct], e);
+                } while (e != k);
             }
         }
         else if (dfn[v] < dfn[u])
         {
-            stk.push(id);
             low[u] = min(low[u], dfn[v]);
+            stk.push(k);
         }
     }
 }
@@ -54,18 +55,19 @@ int main()
     cin >> n >> m;
     dfn.fill(0);
     low.fill(0);
-    belong.fill(0);
-    ans.fill(0);
-    ct = tot = 0;
+    fa.fill(0);
+    ct = cnt = 0;
     G gr;
     gr.resize(n + 1);
+    edges.resize(m + 1);
     for (int i = 1; i <= m; ++i)
     {
         cin >> a >> b;
-        gr[a].push_back(make_pair(b, i));
-        gr[b].push_back(make_pair(a, i));
+        edges[i] = make_pair(a, b);
+        gr[a].push_back(i);
+        gr[b].push_back(i);
     }
-    tarjan(gr, 1, -1);
+    tarjan(gr, 1);
     cout << ct << endl;
     for (int i = 1; i <= m; ++i)
         cout << ans[belong[i]] << " ";
