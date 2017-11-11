@@ -9,14 +9,9 @@ using namespace std;
 int ct = 0;
 struct Edge
 {
-    int v;
-    int c;
+    int v, c;
     Edge() = default;
-    Edge(int v, int c)
-    {
-        this->v = v;
-        this->c = c;
-    }
+    Edge(int v, int c) : v(v), c(c) {}
     friend bool operator>(const Edge &a, const Edge &b)
     {
         return a.c > b.c;

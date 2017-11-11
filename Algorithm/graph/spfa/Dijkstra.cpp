@@ -71,11 +71,8 @@ int main()
         // gr[to].push_back(i);// if Two-Way
     }
     cin >> s >> t;
-    for (int i = 0; i <= n; ++i)
-    {
-        d[i] = INF;
-        vis[i] = 0;
-    }
+    d.fill(INF);
+    vis.fill(0);
     d[s] = 0;
     dijkstra(gr, edg, s);
     cout << d[t] << endl;
