@@ -24,7 +24,7 @@ struct Edge
 {
     int fr, to, di;
     Edge() = default;
-    Edge(int u, int v, int w): fr(u), to(v), di(w) {}
+    Edge(int u, int v, int w) : fr(u), to(v), di(w) {}
 };
 using E = vector<Edge>;
 void dijkstra(G &gr, E &edg, int s)
@@ -61,17 +61,21 @@ int main()
     G gr;
     E edg;
     gr.resize(n + 1);
+    edg.resize(m + 1);
     for (int i = 0; i < m; ++i)
     {
         int fr, to, di;
         cin >> fr >> to >> di;
-        edg.push_back(Edge(fr, to, di));
+        edg[i] = Edge(fr, to, di);
         gr[fr].push_back(i);
         // gr[to].push_back(i);// if Two-Way
     }
     cin >> s >> t;
     for (int i = 0; i <= n; ++i)
+    {
         d[i] = INF;
+        vis[i] = 0;
+    }
     d[s] = 0;
     dijkstra(gr, edg, s);
     cout << d[t] << endl;
