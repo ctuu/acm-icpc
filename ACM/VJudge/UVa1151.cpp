@@ -4,9 +4,9 @@
 #include <queue>
 #include <vector>
 using namespace std;
-#define G vector<Edge>
 #define INF 0x3f3f3f3f
 #define LL long long
+
 int p[5005];
 int find(int x)
 {
@@ -16,8 +16,10 @@ struct Edge
 {
     int u, v;
     LL c;
+    Edge() = default;
     Edge(int u, int v, LL c) : u(u), v(v), c(c) {}
 };
+using G = vector<Edge>;
 bool cmp(Edge &a, Edge &b)
 {
     return a.c < b.c;
@@ -28,13 +30,12 @@ LL dist(pair<LL, LL> &a, pair<LL, LL> &b)
 }
 int main()
 {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
     int T;
     cin >> T;
     while (T--)
     {
-
-        ios_base::sync_with_stdio(0);
-        cin.tie(0);
         int n, q, a, b, c;
         cin >> n >> q;
         vector<LL> ql[12];

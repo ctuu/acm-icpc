@@ -23,6 +23,7 @@ struct Node
 struct Edge
 {
     int fr, to, di;
+    Edge() = default;
     Edge(int u, int v, int w): fr(u), to(v), di(w) {}
 };
 using E = vector<Edge>;

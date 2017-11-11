@@ -24,6 +24,7 @@ struct Node
 struct Edge
 {
     int fr, to, di;
+    Edge() = default;
     Edge(int u, int v, int w) : fr(u), to(v), di(w) {}
 };
 using E = vector<Edge>;
@@ -62,17 +63,21 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int n, m, s, e, k;
+    int wls = 0;
     while (cin >> n >> s >> e)
     {
+        if(wls++)
+        cout << endl;
         G gr;
-        E edg, exp;
+        E edg, exprs;
         gr.resize(n + 1);
         cin >> m;
+        edg.resize(m + 1);
         for (int i = 0; i < m; ++i)
         {
             int fr, to, di;
             cin >> fr >> to >> di;
-            edg.push_back(Edge(fr, to, di));
+            edg[i] = Edge(fr, to, di);
             gr[fr].push_back(i);
             gr[to].push_back(i); // if Two-Way
         }
@@ -81,7 +86,7 @@ int main()
         {
             int fr, to, di;
             cin >> fr >> to >> di;
-            exp.push_back(Edge(fr, to, di));
+            exprs.push_back(Edge(fr, to, di));
         }
         for (int i = 0; i <= n; ++i)
         {
@@ -92,65 +97,71 @@ int main()
         de[e] = 0;
         dijkstra(gr, edg, s, db, pthb);
         dijkstra(gr, edg, e, de, pthe);
-        int ans = db[e], ind = 0;
+        int ans = db[e], ind = -1;
         for (int i = 0; i < k; ++i)
         {
-            Edge &e = exp[i];
+            Edge &e = exprs[i];
             int pth = min(de[e.fr] + db[e.to], db[e.fr] + de[e.to]) + e.di;
             if (ans > pth)
             {
                 ans = pth;
-                ind = i + 1;
+                ind = i;
             }
             ans = min(ans, pth);
         }
-        if (ind)
+        Edge eg;
+        if (ind != -1)
         {
-            Edge eg = exp[ind - 1];
-            int u = (de[eg.fr] + db[eg.to] > db[eg.fr] + de[eg.to]) ? eg.fr : eg.to; //beg to beg
+            eg = exprs[ind];
+            int u = (db[eg.fr] + de[eg.to] > de[eg.fr] + db[eg.to]) ? eg.to : eg.fr; //beg to beg
             int tk = u;
             int v = (u == eg.fr) ? eg.to : eg.fr; // end to end
             stack<int> stk;
             stk.push(u);
-            do
+            while (u != s)
             {
                 eg = edg[pthb[u]];
-                u = (eg.to == u) ? eg.fr : u;
+                u = (u == eg.to) ? eg.fr : eg.to;
                 stk.push(u);
-            } while (u != s);
+            }
             vector<int> p;
-            do
+            p.push_back(v);
+            while (v != e)
             {
                 eg = edg[pthe[v]];
-                v = (eg.to == v) ? eg.fr : v;
+                v = (eg.to == v) ? eg.fr : eg.to;
                 p.push_back(v);
-            } while (v != e);
+            }
+            int spt = 0;
             while (!stk.empty())
             {
-                cout << stk.top() << " ";
+                if (spt++)
+                    cout << " ";
+                cout << stk.top();
                 stk.pop();
             }
             for (auto i : p)
-                cout << i << " ";
+                cout << " " << i;
             cout << endl;
             cout << tk << endl;
         }
-        if (!ind)
+        else
         {
             stack<int> stk;
             int u = e;
             stk.push(u);
-            do
+            while (u != s)
             {
-                Edge eg = edg[pthb[u]];
-                u = (eg.to == u) ? eg.fr : u;
+                eg = edg[pthb[u]];
+                u = (eg.to == u) ? eg.fr : eg.to;
                 stk.push(u);
-                // cout << "!!!" << endl;
-            } while (u != s);
-            while (!stk.empty())
+            }
+            int spt = 0;
             while (!stk.empty())
             {
-                cout << stk.top() << " ";
+                if (spt++)
+                    cout << " ";
+                cout << stk.top();
                 stk.pop();
             }
             cout << endl;
