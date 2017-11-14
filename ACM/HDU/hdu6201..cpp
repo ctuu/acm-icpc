@@ -4,8 +4,8 @@
 #include <queue>
 #include <vector>
 using namespace std;
-const int N = 1e4 + 7;
-const int M = 1e5 + 7;
+const int N = 2e6 + 7;
+const int M = 1e6 + 7;
 const int INF = 0x3f3f3f3f;
 using G = vector<vector<int>>;
 array<int, N> onq, d, cnt;
@@ -55,24 +55,37 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m, s, t;
-    cin >> n >> m;
-    G gr;
-    E edg;
-    gr.resize(n + 1);
-    edg.resize(m + 1);
-    for (int i = 0; i < m; ++i)
+    int T;
+    cin >> T;
+    while (T--)
     {
-        int fr, to, di;
-        cin >> fr >> to >> di;
-        edg[i] = Edge(fr, to, di);
-        gr[fr].push_back(i);
-        gr[to].push_back(i); // if Two-Way
+        int n;
+        cin >> n;
+        G gr;
+        E edg;
+        gr.resize(N);
+        edg.resize(N);
+        for (int i = 1; i <= n; ++i)
+        {
+            int di;
+            cin >> di;
+            edg[n + i] = Edge(n+1, i, -di);
+            gr[n+1].push_back(n + i);
+            edg[2 * n + i] = Edge(i, n+2, di);
+            gr[i].push_back(2 * n + i);
+        }
+        for (int i = 0; i < n - 1; ++i)
+        {
+            int fr, to, di;
+            cin >> fr >> to >> di;
+            edg[i] = Edge(fr, to, di);
+            gr[fr].push_back(i);
+            gr[to].push_back(i); // if Two-Way
+        }
+        if (ford(gr, edg, n + 1, n + 2))
+            cout << -d[n + 2] << endl;
+        else
+            cout << "No response." << endl;
     }
-    cin >> s >> t;
-    if (ford(gr, edg, s, n))
-        cout << d[t] << endl;
-    else
-        cout << "false" << endl;
     return 0;
 }

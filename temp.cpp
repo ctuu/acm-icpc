@@ -1,88 +1,91 @@
 #include <algorithm>
-#include <array>
+#include <deque>
 #include <iostream>
+#include <map>
+#include <math.h>
+#include <memory.h>
 #include <queue>
+#include <set>
+#include <stack>
+#include <stdio.h>
+#include <string>
 #include <vector>
+#define INF (1LL << 62) //WA了好几发
+#define ll long long int
 using namespace std;
-const int N = 1e4 + 7;
-const int M = 1e5 + 7;
-const int INF = 0x3f3f3f3f;
-using pii = pair<int, int>;
-using G = vector<vector<int>>; //save index
-array<int, N> vis, d;
-array<int, M> pth;
-int ct;
-struct Node
+
+typedef pair<ll, int> P;
+struct edge
 {
-    int d, u;
-    Node(int d, int u) : d(d), u(u) {}
-    bool operator<(const Node &a) const
+    int to;
+    ll dis;
+    edge(int to, ll dis)
     {
-        return d > a.d;
+        this->to = to;
+        this->dis = dis;
     }
 };
-struct Edge
+int N, R;
+int a, b;
+ll c;
+ll dis[100005];  //记录最短路径
+ll disc[100005]; //记录次短路径
+vector<edge> G[100005];
+
+void dijkstra()
 {
-    int fr, to, di;
-    Edge() = default;
-    Edge(int u, int v, int w) : fr(u), to(v), di(w) {}
-};
-using E = vector<Edge>;
-void dijkstra(G &gr, E &edg, int s)
-{
-    priority_queue<Node> pq;
-    pq.push(Node(0, s));
-    while (!pq.empty())
+    fill(dis, dis + 100005, INF);
+    fill(disc, disc + 100005, INF);
+    priority_queue<P, vector<P>, greater<P>> q;
+    dis[1] = 0;
+    q.push(P(0, 1));
+    while (q.size())
     {
-        Node x = pq.top();
-        pq.pop();
-        int u = x.u;
-        if (vis[u])
+        P p = q.top();
+        q.pop();
+        ll dd = p.first;
+        int v = p.second;
+        if (disc[v] < dd)
             continue;
-        vis[u] = 1;
-        for (auto i : gr[u])
+        for (int i = 0; i < G[v].size(); i++)
         {
-            Edge &e = edg[i];
-            int to = (e.fr == u) ? e.to : e.fr;
-            if(d[to] == d[u] + e.di)
-                ++ct;
-            if (d[to] > d[u] + e.di)
+            edge &e = G[v][i];
+            ll d = dd + e.dis;
+            if (dis[e.to] >= d)
             {
-                d[to] = d[u] + e.di;
-                pth[to] = i;
-                pq.push(Node(d[to], to));
+                ll ttt = d;
+                d = dis[e.to];
+                dis[e.to] = ttt;
+                q.push(P(dis[e.to], e.to));
+            }
+            if (disc[e.to] >= d && dis[e.to] <= d)
+            {
+                disc[e.to] = d;
+                q.push(P(disc[e.to], e.to));
             }
         }
     }
+    cout << disc[N] << endl;
 }
+
 int main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    int n, m, s, t;
-    cin >> n >> m;
-    G gr;
-    E edg;
-    gr.resize(n + 1);
-    edg.resize(m + 1);
-    for (int i = 0; i < m; ++i)
+    int t;
+    scanf("%d", &t);
+    while (t--)
     {
-        int fr, to, di;
-        cin >> fr >> to >> di;
-        edg[i] = Edge(fr, to, di);
-        gr[fr].push_back(i);
-        // gr[to].push_back(i);// if Two-Way
+
+        for (int i = 0; i < 100005; i++)
+            G[i].clear();
+
+        scanf("%d%d", &N, &R);
+        for (int i = 1; i <= R; i++)
+        {
+            scanf("%d%d%lld", &a, &b, &c);
+            G[a].push_back(edge(b, c));
+            G[b].push_back(edge(a, c));
+        }
+        dijkstra();
     }
-    cin >> s >> t;
-    for (int i = 0; i <= n; ++i)
-    {
-        d[i] = INF;
-        vis[i] = 0;
-    }
-    d[s] = 0;
-    ct = 1;
-    dijkstra(gr, edg, s);
-    cout << ct << endl;
-    cout << d[t] << endl;
     return 0;
 }

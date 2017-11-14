@@ -8,7 +8,7 @@ const int N = 1e4 + 7;
 const int M = 1e5 + 7;
 const int INF = 0x3f3f3f3f;
 using G = vector<vector<int>>; //save index
-array<int, N> vis, d;
+array<int, N> vis, d, cd;
 array<int, M> pth;
 struct Node
 {
@@ -39,11 +39,18 @@ void dijkstra(G &gr, E &edg, int s)
         {
             Edge &e = edg[i];
             int to = (e.fr == u) ? e.to : e.fr;
+            int tc = d[u] + e.di;
             if (d[to] > d[u] + e.di)
             {
+                tc = d[to];
                 d[to] = d[u] + e.di;
                 pth[to] = i;
                 pq.push(Node(d[to], to));
+            }
+            if(cd[to] > tc && d[to] < tc)
+            {
+                cd[to] = tc;
+                pq.push(Node(cd[to], to));
             }
         }
     }
@@ -53,7 +60,7 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int n, m, s, t;
-    cin >> n >> m;
+    cin >> n >> m >> s >> t;
     G gr;
     E edg;
     gr.resize(n + 1);
@@ -66,11 +73,11 @@ int main()
         gr[fr].push_back(i);
         // gr[to].push_back(i);// if Two-Way
     }
-    cin >> s >> t;
     d.fill(INF);
+    cd.fill(INF);
     vis.fill(0);
     d[s] = 0;
     dijkstra(gr, edg, s);
-    cout << d[t] << endl;
+    cout << cd[t] << endl;
     return 0;
 }
