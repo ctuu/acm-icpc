@@ -21,7 +21,6 @@ int mst(G &gr)
     int sum = 0, ct = 0;
     vector<Edge> pa = gr.first;
     sort(pa.begin(), pa.end(), [](Edge &a, Edge &b) { return a.c < b.c; });
-    int si = pa.size();
     for (auto e : pa)
     {
         int u = find(e.u), v = find(e.v);
