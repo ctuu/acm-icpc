@@ -7,7 +7,6 @@ using namespace std;
 const int N = 1e4 + 7;
 const int M = 1e5 + 7;
 const int INF = 0x3f3f3f3f;
-using pii = pair<int, int>;
 using G = vector<vector<int>>; //save index
 array<int, N> vis, d;
 array<int, M> pth;
@@ -15,10 +14,7 @@ struct Node
 {
     int d, u;
     Node(int d, int u) : d(d), u(u) {}
-    bool operator<(const Node &a) const
-    {
-        return d > a.d;
-    }
+    bool operator<(const Node &a) const { return d > a.d; }
 };
 struct Edge
 {
@@ -29,6 +25,9 @@ struct Edge
 using E = vector<Edge>;
 void dijkstra(G &gr, E &edg, int s)
 {
+    d.fill(INF);
+    d[s] = 0;
+    vis.fill(0);
     priority_queue<Node> pq;
     pq.push(Node(0, s));
     while (!pq.empty())
@@ -51,33 +50,68 @@ void dijkstra(G &gr, E &edg, int s)
         }
     }
 }
+
+struct Ande
+{
+    int u, g, f;
+    Ande(int u, int g, int f) : u(u), g(g), f(f) {}
+    bool operator<(const Ande a) const
+    {
+        if (a.f == f)
+            return a.g < g;
+        return a.f < f;
+    }
+};
+
+int astar(G &gr, E &edg, int s, int t, int k)
+{
+    if (d[s] == INF)
+        return INF;
+    priority_queue<Ande> que;
+    que.push(Ande(s, 0, d[s]));
+    while (!que.empty())
+    {
+        Ande c = que.top();
+        que.pop();
+        int u = c.u;
+        if (u == t)
+            if (k-- <= 1)
+                return c.f;
+        for (auto i : gr[u])
+        {
+            Edge &e = edg[i];
+            int to = (e.fr == u) ? e.to : e.fr;
+            que.push(Ande(to, c.g + e.di, c.g + e.di + d[to]));
+        }
+    }
+    return INF;
+}
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m;
-    while (cin >> n >> m && n && m)
+    int n, m, s, t, k;
+    while (cin >> n >> m && n)
     {
-        G gr;
+        cin >> s >> t >> k;
+        G gr, grr;
         E edg;
         gr.resize(n + 1);
+        grr.resize(n + 1);
         edg.resize(m + 1);
         for (int i = 0; i < m; ++i)
         {
             int fr, to, di;
             cin >> fr >> to >> di;
             edg[i] = Edge(fr, to, di);
+            grr[to].push_back(i); // 反向建图
             gr[fr].push_back(i);
-            gr[to].push_back(i);// if Two-Way
+            // gr[to].push_back(i);// if Two-Way
         }
-        for (int i = 0; i <= n; ++i)
-        {
-            d[i] = INF;
-            vis[i] = 0;
-        }
-        d[1] = 0;
-        dijkstra(gr, edg, 1);
-        cout << d[n] << endl;
+        dijkstra(grr, edg, t);
+        int ans = astar(gr, edg, s, t, k);
+        ans = (ans == INF) ? -1 : ans;
+        cout << ans << endl;
     }
     return 0;
 }

@@ -8,7 +8,7 @@ const int N = 1e4 + 7;
 const int M = 1e5 + 7;
 const int INF = 0x3f3f3f3f;
 using G = vector<vector<int>>; //save index
-array<int, N>d;
+array<int, N> vis, d;
 array<int, M> pth;
 struct Node
 {
@@ -25,6 +25,9 @@ struct Edge
 using E = vector<Edge>;
 void dijkstra(G &gr, E &edg, int s)
 {
+    d.fill(INF);
+    d[s] = 0;
+    vis.fill(0);
     priority_queue<Node> pq;
     pq.push(Node(0, s));
     while (!pq.empty())
@@ -47,28 +50,65 @@ void dijkstra(G &gr, E &edg, int s)
         }
     }
 }
+
+struct Ande
+{
+    int u, g, f;
+    Ande(int u, int g, int f) : u(u), g(g), f(f) {}
+    bool operator<(const Ande a) const
+    {
+        if (a.f == f)
+            return a.g < g;
+        return a.f < f;
+    }
+};
+
+int astar(G &gr, E &edg, int s, int t, int k)
+{
+    if(d[s] == INF)
+        return INF;
+    priority_queue<Ande> que;
+    que.push(Ande(s, 0, d[s]));
+    while (!que.empty())
+    {
+        Ande c = que.top();
+        que.pop();
+        int u = c.u;
+        if (u == t)
+            if (k-- <=   1)
+                return c.f;
+        for (auto i : gr[u])
+        {
+            Edge &e = edg[i];
+            int to = (e.fr == u) ? e.to : e.fr;
+            que.push(Ande(to, c.g+e.di, c.g + e.di + d[to]));
+        }
+    }
+    return INF;
+}
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m, s, t;
+    int n, m, s, t, k;
     cin >> n >> m;
-    G gr;
+    cin >> s >> t >> k;
+    G gr, grr;
     E edg;
     gr.resize(n + 1);
+    grr.resize(n + 1);
     edg.resize(m + 1);
     for (int i = 0; i < m; ++i)
     {
         int fr, to, di;
         cin >> fr >> to >> di;
         edg[i] = Edge(fr, to, di);
-        gr[fr].push_back(i);
+        grr[to].push_back(i); // 反向建图
+        gr[fr].push_back(i); 
         // gr[to].push_back(i);// if Two-Way
     }
-    cin >> s >> t;
-    d.fill(INF);
-    d[s] = 0;
-    dijkstra(gr, edg, s);
-    cout << d[t] << endl;
+    dijkstra(grr, edg, t);
+    cout << astar(gr, edg, s, t, k) << endl;
+    // cout << d[t] << endl;
     return 0;
 }
