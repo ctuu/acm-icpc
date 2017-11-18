@@ -14,26 +14,30 @@ public class Main {
   public static void main(String[] args) {
     init();
     Scanner cin = new Scanner(System.in);
-    int t = cin.nextInt();
-    while (t-- > 0) {
-      BigInteger n = cin.nextBigInteger();
-      BigInteger m = cin.nextBigInteger();
-      int up = 0;
-      BigInteger sum = BigInteger.ZERO, tmp = n, ans = BigInteger.ZERO;
-      while (sum.compareTo(n) < 0) {
-        sum = sum.add(m.multiply(bas[up]));
-        ++up;
+    try {
+      int t = cin.nextInt();
+      while (t-- > 0) {
+        BigInteger n = cin.nextBigInteger();
+        BigInteger m = cin.nextBigInteger();
+        int up = 0;
+        BigInteger sum = BigInteger.ZERO, tmp = n, ans = BigInteger.ZERO;
+        while (sum.compareTo(n) < 0) {
+          sum = sum.add(m.multiply(bas[up]));
+          ++up;
+        }
+        for (int i = up; i >= 0; --i) {
+          BigInteger tm = bas[i].subtract(BigInteger.ONE);
+          if (tm.multiply(m).compareTo(tmp) >= 0)
+            continue;
+          BigInteger k = tmp.divide(bas[i]);
+          k = k.min(m);
+          tmp = tmp.subtract(bas[i].multiply(k));
+          ans = ans.add(bas[i]);
+        }
+        System.out.println(ans);
       }
-      for (int i = up; i >= 0; --i) {
-        BigInteger tm = bas[i].subtract(BigInteger.ONE);
-        if (tm.multiply(m).compareTo(tmp) >= 0)
-          continue;
-        BigInteger k = tmp.divide(bas[i]);
-        k = k.min(m);
-        tmp = tmp.subtract(bas[i].multiply(k));
-        ans = ans.add(bas[i]);
-      }
-      System.out.println(ans);
+    } finally {
+      cin.close();
     }
   }
 }
