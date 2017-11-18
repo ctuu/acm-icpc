@@ -22,21 +22,20 @@ int main()
         cin >> tmp;
         b.push_back(tmp);
     }
-    sort(a.begin(), a.end(), greater<LL>());
-    sort(b.begin(), b.end(), greater<LL>());
-    for (LL i = 0; i < n; ++i)
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+    for (LL i = 0; i < n && x; ++i)
     {
-        if (x--)
-            break;
+        --x;
         if (a[i] >= y)
             break;
         a[i] = y;
     }
     LL ans = 0;
-    sort(a.begin(), a.end(), greater<LL>());
+    sort(a.begin(), a.end());
     for (LL i = 0; i < n; ++i)
-        // if (a[i] >= b[i])
-            ans = max(ans, a[i] - b[i]);
+        if (a[i] <= b[i])
+            ans = max(ans, b[i] - a[i]);
     cout << ans << endl;
     return 0;
 }
