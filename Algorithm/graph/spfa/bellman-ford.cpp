@@ -20,8 +20,7 @@ using E = vector<Edge>;
 bool ford(G &gr, E &edg, int s, int n)
 {
     queue<int> q;
-    onq.fill(0);
-    cnt.fill(0);
+    cnt.fill(0); //访问某点次数
     d.fill(INF);
     d[s] = 0;
     onq[s] = 1;
@@ -30,7 +29,6 @@ bool ford(G &gr, E &edg, int s, int n)
     {
         int u = q.front();
         q.pop();
-        onq[u] = false;
         for (auto i : gr[u])
         {
             Edge &e = edg[i];
@@ -48,6 +46,7 @@ bool ford(G &gr, E &edg, int s, int n)
                 }
             }
         }
+        onq[u] = false;
     }
     return true;
 }
