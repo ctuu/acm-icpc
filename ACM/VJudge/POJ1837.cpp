@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <vector>
 #define MAXN 25
-#define SH 5000
+#define SH 5000 //offest
 #define RAG 300
 using namespace std;
 int main()
