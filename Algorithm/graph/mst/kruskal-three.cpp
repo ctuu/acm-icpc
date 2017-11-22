@@ -37,11 +37,11 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m, u, v ,c;
+    int n, m, u, v, c;
     cin >> n >> m;
     G gr;
     gr.second = n;
-    for(int i = 0; i < m; ++i)
+    for (int i = 0; i < m; ++i)
     {
         cin >> u >> v >> c;
         gr.first.push_back(Edge(u, v, c));

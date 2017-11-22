@@ -11,10 +11,7 @@ struct Edge
     int v, c;
     Edge() = default;
     Edge(int v, int c) : v(v), c(c) {}
-    bool operator<(const Edge &a) const
-    {
-        return c > a.c;
-    }
+    bool operator<(const Edge &a) const { return c > a.c; }
 };
 using G = vector<vector<Edge>>;
 array<bool, N> mrk;
@@ -50,7 +47,7 @@ int main()
     cin >> n >> m;
     G gr;
     gr.resize(n + 1);
-    for(int i = 0; i < m; ++i)
+    for (int i = 0; i < m; ++i)
     {
         cin >> u >> v >> c;
         gr[u - 1].push_back(Edge(v - 1, c));

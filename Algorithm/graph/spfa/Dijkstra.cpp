@@ -8,7 +8,7 @@ const int N = 1e4 + 7;
 const int M = 1e5 + 7;
 const int INF = 0x3f3f3f3f;
 using G = vector<vector<int>>; //save index
-array<int, N>d;
+array<int, N> d;
 array<int, M> pth;
 struct Node
 {
@@ -25,6 +25,8 @@ struct Edge
 using E = vector<Edge>;
 void dijkstra(G &gr, E &edg, int s)
 {
+    d.fill(INF);
+    d[s] = 0;
     priority_queue<Node> pq;
     pq.push(Node(0, s));
     while (!pq.empty())
@@ -66,8 +68,6 @@ int main()
         // gr[to].push_back(i);// if Two-Way
     }
     cin >> s >> t;
-    d.fill(INF);
-    d[s] = 0;
     dijkstra(gr, edg, s);
     cout << d[t] << endl;
     return 0;

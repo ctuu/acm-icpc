@@ -9,18 +9,18 @@ public class Main {
             BigInteger x, y;
             x = cin.nextBigInteger();
             y = cin.nextBigInteger();
-            x = x.add(BigInteger.ONE); x = x.subtract(BigInteger.TEN);
-            x = x.multiply(BigInteger.ZERO);
-            x = x.divide(y); x = x.remainder(y); x = x.mod(y);
-            x = x.pow(10); x = x.gcd(y); x = x.abs(); x = x.negate();
-            x = x.max(y); x = x.min(y);
-            if (x.compareTo(y) > 0) { }
-            if (x.equals(y)) { }
-            x = new BigInteger("123456");
-            x = new BigInteger("1010101", 2);
+            x = x.add(BigInteger.ONE); x = x.subtract(BigInteger.TEN);//加，减
+            x = x.multiply(BigInteger.ZERO);//乘
+            x = x.divide(y); x = x.remainder(y); x = x.mod(y);//除，余，膜
+            x = x.pow(10); x = x.gcd(y); x = x.abs(); x = x.negate();//乘方，GCD，abs，负
+            x = x.max(y); x = x.min(y);//MAX, MIN
+            if (x.compareTo(y) > 0) { }//比较
+            if (x.equals(y)) { }//判等
+            x = new BigInteger("123456");//构造方法
+            x = new BigInteger("1010101", 2);//以某进制构造
             x.toString();
             System.out.println(x);
-            BigDecimal a, b;
+            BigDecimal a, b;//大浮点
             a = cin.nextBigDecimal();
             b = cin.nextBigDecimal();
             Double g = a.doubleValue();
@@ -33,6 +33,7 @@ public class Main {
         }
     }
 }
+
 /*
 RoundingMode是一个枚举类，有一下几个常量：
 UP,始终对非零舍弃部分前面的数字加 1

@@ -6,27 +6,31 @@
 using namespace std;
 const int N = 1e6 + 7;
 const int M = 1e6 + 7;
-const long long INF = (long long)1 << 62;
+using LL = long long;
+const LL INF = (LL)1 << 62;
 using G = vector<vector<int>>; //save index
-array<long long, N> d, cd;
+array<LL, N> d, cd;
 array<int, M> pth;
 struct Node
 {
-    long long d;
+    LL d;
     int u;
-    Node(long long d, int u) : d(d), u(u) {}
+    Node(LL d, int u) : d(d), u(u) {}
     bool operator<(const Node &a) const { return d > a.d; }
 };
 struct Edge
 {
     int fr, to;
-    long long di;
+    LL di;
     Edge() = default;
-    Edge(int u, int v, long long w) : fr(u), to(v), di(w) {}
+    Edge(int u, int v, LL w) : fr(u), to(v), di(w) {}
 };
 using E = vector<Edge>;
 void dijkstra(G &gr, E &edg, int s)
 {
+    d.fill(INF);
+    cd.fill(INF);
+    d[s] = 0;
     priority_queue<Node> pq;
     pq.push(Node(0, s));
     while (!pq.empty())
@@ -40,7 +44,7 @@ void dijkstra(G &gr, E &edg, int s)
         {
             Edge &e = edg[i];
             int to = (e.fr == u) ? e.to : e.fr;
-            long long tc = x.d + e.di;
+            LL tc = x.d + e.di;
             if (d[to] >= tc)
             {
                 swap(tc, d[to]);
@@ -72,17 +76,15 @@ int main()
         for (int i = 0; i < m; ++i)
         {
             int fr, to;
-            long long di;
+            LL di;
             cin >> fr >> to >> di;
             edg[i] = Edge(fr, to, di);
             gr[fr].push_back(i);
-            gr[to].push_back(i); // if Two-Way
+            gr[to].push_back(i); // Two-Way
         }
-        d.fill(INF);
-        cd.fill(INF);
-        d[1] = 0;
-        dijkstra(gr, edg, 1);
-        cout << cd[n] << endl;
+        int s = 1, t = n;
+        dijkstra(gr, edg, s);
+        cout << cd[t] << endl;
     }
     return 0;
 }
