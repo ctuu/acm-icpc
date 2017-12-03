@@ -34,29 +34,47 @@ int main()
                 }
         queue<nd> q;
         q.push(S);
+        vis[S.z][S.x][S.y] = 1;
         while (!q.empty())
         {
             nd tmp = q.front();
             q.pop();
             int z = tmp.z, y = tmp.y, x = tmp.x, le = tmp.le;
-            vis[z][x][y] = 1;
             if (dug[z][x][y] == 'E')
             {
                 ans = le;
                 break;
             }
             if (z + 1 < l && !vis[z + 1][x][y] && dug[z + 1][x][y] != '#')
+            {
                 q.push(nd(z + 1, x, y, le + 1));
-            if (z  > 0 && !vis[z - 1][x][y] && dug[z - 1][x][y] != '#')
+                vis[z + 1][x][y] = 1;
+            }
+            if (z > 0 && !vis[z - 1][x][y] && dug[z - 1][x][y] != '#')
+            {
                 q.push(nd(z - 1, x, y, le + 1));
+                vis[z - 1][x][y] = 1;
+            }
             if (x > 0 && !vis[z][x - 1][y] && dug[z][x - 1][y] != '#')
+            {
                 q.push(nd(z, x - 1, y, le + 1));
+                vis[z][x - 1][y] = 1;
+            }
             if (x + 1 < r && !vis[z][x + 1][y] && dug[z][x + 1][y] != '#')
+            {
                 q.push(nd(z, x + 1, y, le + 1));
+                vis[z][x + 1][y] = 1;
+            }
             if (y > 0 && !vis[z][x][y - 1] && dug[z][x][y - 1] != '#')
+            {
                 q.push(nd(z, x, y - 1, le + 1));
+                vis[z][x][y - 1] = 1;
+            }
             if (y + 1 < c && !vis[z][x][y + 1] && dug[z][x][y + 1] != '#')
+            {
                 q.push(nd(z, x, y + 1, le + 1));
+                vis[z][x][y + 1] = 1;
+            }
         }
         if (ans != INF)
             cout << "Escaped in " << ans << " minute(s)." << endl;
