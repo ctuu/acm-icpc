@@ -1,42 +1,55 @@
 #include <algorithm>
-#include <cmath>
 #include <iostream>
-#include <queue>
+#include <map>
 #include <vector>
+#define INF 0x3f3f3f3f
 using namespace std;
-#define N 2003
-#define G pair<vector<Edge>, int>
+#define N 100007
+#define G vector<vector<Edge>>
+int ct = 0;
 char ty[2003][8];
-int p[N];
-int find(int x) { return p[x] == x ? x : p[x] = find(p[x]); }
+bool mrk[N];
+int dist[N];
 struct Edge
 {
-    int u, v, c;
+    int v, c;
     Edge(){};
-    Edge(int u, int v, int c) : u(u), v(v), c(c) {}
+    Edge(int v, int c) : v(v), c(c) {}
+    bool operator<(const Edge &a) const { return c > a.c; }
 };
-bool cmp(Edge a, Edge b)
+int mst(G &gr, int size)
 {
-    return a.c < b.c;
-}
-int mst(G &gr)
-{
+    int sum = 0;
+    map<int, int> idx;
     for (int i = 0; i < N; ++i)
-        p[i] = i;
-    int sum = 0, ct = 0;
-    vector<Edge> pa = gr.first;
-    sort(pa.begin(), pa.end(), cmp);
-    int tmp = pa.size();
-    for (int i = 0; i < tmp; ++i)
     {
-        Edge e = pa[i];
-        int u = find(e.u), v = find(e.v);
-        if (u == v)
-            continue;
-        p[u] = v;
-        ++ct;
-        sum += e.c;
+        dist[i] = INF;
+        mrk[i] = 0;
     }
+    idx[0] = 0;
+    dist[0] = 0;
+    while (!idx.empty())
+    {
+        map<int, int>::iterator iter = idx.begin();
+        int u = iter->second;
+        idx.erase(iter);
+        mrk[u] = 1;
+        int tmp = gr[u].size();
+        for (int i = 0; i < tmp; ++i)
+        {
+            Edge e = gr[u][i];
+            int v = e.v;
+            if (mrk[v])
+                continue;
+            if (e.c < dist[v])
+            {
+                dist[v] = e.c;
+                idx[dist[v]] = v;
+            }
+        }
+    }
+    for (int i = 0; i < size; ++i)
+        sum += dist[i];
     return sum;
 }
 int dis(int a, int b)
@@ -54,13 +67,16 @@ int main()
     while (cin >> n && n)
     {
         G gr;
-        gr.second = n;
+        gr.resize(n + 1);
         for (int i = 0; i < n; ++i)
             cin >> ty[i];
         for (int i = 0; i < n; ++i)
             for (int j = i + 1; j < n; ++j)
-                gr.first.push_back(Edge(i, j, dis(i, j)));
-        int ans = mst(gr);
+            {
+                gr[i].push_back(Edge(j, dis(i, j)));
+                gr[j].push_back(Edge(i, dis(i, j)));
+            }
+        int ans = mst(gr, n);
         cout << "The highest possible quality is 1/" << ans << "." << endl;
     }
     return 0;

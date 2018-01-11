@@ -7,6 +7,8 @@
 using namespace std;
 const int N = 1e5 + 7;
 int ct = 0;
+array<bool, N> mrk;
+array<int, N> dist;
 struct Edge
 {
     int v, c;
@@ -15,8 +17,6 @@ struct Edge
     bool operator<(const Edge &a) const { return c > a.c; }
 };
 using G = vector<vector<Edge>>;
-array<bool, N> mrk;
-array<int, N> dist;
 int mst(G &gr, int size)
 {
     int sum = 0;
