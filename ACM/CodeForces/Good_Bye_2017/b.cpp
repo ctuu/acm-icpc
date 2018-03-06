@@ -10,8 +10,6 @@ void dfs(string s, int x, int y, char u, char d, char l, char r)
 {
     if (x < 0 || x >= n || y < 0 || y >= m)
         return;
-    if (s.size() == 0)
-        return;
     if (ar[x][y] == '#')
         return;
     if (ar[x][y] == 'E')
@@ -19,6 +17,8 @@ void dfs(string s, int x, int y, char u, char d, char l, char r)
         ct++;
         return;
     }
+    if (s.size() == 0)
+        return;
     char a = s[0];
     if (a == u)
         dfs(s.substr(1, s.size()), x - 1, y, u, d, l, r);
