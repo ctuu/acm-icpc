@@ -40,7 +40,7 @@ int main()
         int si = ps.size();
         bool fl = 0;
         for (int i = 0; i < si; ++i)
-            for (int j = i + 1; j < si; ++j)
+            for (int j = 0; j < si; ++j)
             {
                 char mtp[13][13];
                 int tans = -1;
@@ -66,12 +66,12 @@ int main()
                         qu.push(It(Po(tx - 1, ty), tp.s + 1));
                         mtp[tx - 1][ty] = '.';
                     }
-                    if (ty + 1 < n && mtp[tx][ty + 1] == '#')
+                    if (ty + 1 < m && mtp[tx][ty + 1] == '#')
                     {
                         qu.push(It(Po(tx, ty + 1), tp.s + 1));
                         mtp[tx][ty + 1] = '.';
                     }
-                    if (ty - 1 < n && mtp[tx][ty - 1] == '#')
+                    if (ty - 1 >= 0 && mtp[tx][ty - 1] == '#')
                     {
                         qu.push(It(Po(tx, ty - 1), tp.s + 1));
                         mtp[tx][ty - 1] = '.';
