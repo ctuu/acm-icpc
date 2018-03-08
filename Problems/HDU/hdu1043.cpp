@@ -6,15 +6,18 @@
 #include <vector>
 using namespace std;
 using A = array<int, 9>;
+const int INF = 0x3f3f3f3f;
+const int MN = 400000;
 int fact[10] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880};
-bool vis[362880];
-string step[362880];
+bool vis[MN];
+// string step[362880];
+char step[MN];
+int can[MN];
 struct Po
 {
     A ar;
-    int x; 
-    string s;
-    Po(A ar, int x, string s) : ar(ar), x(x), s(s) {}
+    int x, ct;
+    Po(A ar, int x, int ct) : ar(ar), x(x), ct(ct) {}
 };
 
 int cantor(A ar)
@@ -40,9 +43,9 @@ int main()
         oar[i] = i + 1;
     oar[8] = 0;
     queue<Po> qu;
-    qu.push(Po(oar, 8, ""));
-    vis[cantor(oar)] = 1;
-    step[cantor(oar)] = "lr";
+    int aim = cantor(oar);
+    qu.push(Po(oar, 8, aim));
+    vis[aim] = 1;
     while (!qu.empty())
     {
         Po cu = qu.front();
@@ -58,14 +61,13 @@ int main()
                 A tr = cu.ar;
                 tr[cx] = tr[cx + p[i]];
                 tr[cx + p[i]] = 0;
-                string ts = cu.s;
-                ts.insert(ts.begin(), q[i]);
                 int fl = cantor(tr);
                 if (!vis[fl])
                 {
                     vis[fl] = 1;
-                    step[fl] = ts;
-                    qu.push(Po(tr, cx + p[i], ts));
+                    step[fl] = q[i];
+                    can[fl] = cu.ct;
+                    qu.push(Po(tr, cx + p[i], fl));
                 }
             }
     }
@@ -80,11 +82,19 @@ int main()
         A ar;
         for (int i = 0; i < 9; ++i)
             foo >> ar[i];
-        int ans = cantor(ar);
-        if (!vis[ans])
+        int tmp = cantor(ar);
+        if (!vis[tmp])
             cout << "unsolvable" << endl;
         else
-            cout << step[ans] << endl;
+        {
+            string san = "";
+            while (tmp != aim)
+            {
+                san += step[tmp];
+                tmp = can[tmp];
+            }
+            cout << san << endl;
+        }
     }
     return 0;
 }
