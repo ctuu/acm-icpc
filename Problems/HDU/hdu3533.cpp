@@ -54,7 +54,7 @@ int main()
                     continue;
                 if (c == 'N' && (x - v < 0 || vis[x - v][y]))
                     continue;
-                if (c == 'S' && (x - v > n || vis[x + v][y]))
+                if (c == 'S' && (x + v > n || vis[x + v][y]))
                     continue;
                 if (c == 'W' && (y - v < 0 || vis[x][y - v]))
                     continue;
