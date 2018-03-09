@@ -6,7 +6,7 @@
 using namespace std;
 const int INF = 0x3f3f3f3f;
 array<array<array<bool, 1030>, 110>, 110> map;
-array<array<array<bool, 1030>, 110>, 110> tmak;
+array<array<array<bool, 1030>, 110>, 110> mrk;
 array<array<bool, 110>, 110> vis;
 struct Lo
 {
@@ -29,7 +29,7 @@ int main()
         for (auto &i : map)
             for (auto &j : i)
                 j.fill(0);
-        for (auto &i : tmak)
+        for (auto &i : mrk)
             for (auto &j : i)
                 j.fill(0);
         for (auto &i : vis)
@@ -46,56 +46,36 @@ int main()
             {
                 for (std::size_t k = 0; k < bs.size(); ++k)
                 {
-                    if (c == 'N' && bs[k].x - v > -1 && !vis[bs[k].x - v][bs[k].y])
-                    {
+                    if (c == 'N')
                         bs[k].x -= v;
-                        map[bs[k].x][bs[k].y][j] = 1;
-                    }
-                    if (c == 'S' && bs[k].x + v <= n && !vis[bs[k].x + v][bs[k].y])
-                    {
+                    if (c == 'S')
                         bs[k].x += v;
-                        map[bs[k].x][bs[k].y][j] = 1;
-                    }
-                    if (c == 'W' && bs[k].y - v > -1 && !vis[bs[k].x][bs[k].y - v])
-                    {
+                    if (c == 'W')
                         bs[k].y -= v;
-                        map[bs[k].x][bs[k].y][j] = 1;
-                    }
-                    if (c == 'E' && bs[k].y + v <= m && !vis[bs[k].x][bs[k].y + v])
-                    {
+                    if (c == 'E')
                         bs[k].y += v;
+                    if (bs[k].x > -1 && bs[k].y <= n && bs[k].y > -1 && bs[k].y <= m && !vis[bs[k].x][bs[k].y])
                         map[bs[k].x][bs[k].y][j] = 1;
-                    }
                 }
                 if (++e < t)
                     continue;
+                if (c == 'N' && (x - v < 0 || vis[x - v][y]))
+                    continue;
+                if (c == 'S' && (x - v > n || vis[x + v][y]))
+                    continue;
+                if (c == 'W' && (y - v < 0 || vis[x][y - v]))
+                    continue;
+                if (c == 'E' && (y + v > m || vis[x][y + v]))
+                    continue;
                 e = 0;
-                if (c == 'N' && x - v > -1 && !vis[x - v][y])
-                {
-                    map[x][y][j] = 1;
-                    bs.push_back(Bu(x, y));
-                }
-                if (c == 'S' && x - v <= n && !vis[x + v][y])
-                {
-                    map[x][y][j] = 1;
-                    bs.push_back(Bu(x, y));
-                }
-                if (c == 'W' && y - v > -1 && !vis[x][y - v])
-                {
-                    map[x][y][j] = 1;
-                    bs.push_back(Bu(x, y));
-                }
-                if (c == 'E' && y + v <= m && !vis[x][y + v])
-                {
-                    map[x][y][j] = 1;
-                    bs.push_back(Bu(x, y));
-                }
+                map[x][y][j] = 1;
+                bs.push_back(Bu(x, y));
             }
         }
         queue<Lo> qu;
         Lo tmp = Lo(0, 0, d, 0);
         qu.push(tmp);
-        tmak[0][0][0] = 1;
+        // mrk[0][0][0] = 1;
         int ans = INF;
         int ctt = 0;
         // while (!qu.empty())
@@ -111,7 +91,7 @@ int main()
         //         cout << ctt << "------mak------" << endl;
         //         for (int i = 0; i <= n; ++i, cout << endl)
         //             for (int j = 0; j <= m; ++j)
-        //                 cout << tmak[i][j][ctt];
+        //                 cout << mrk[i][j][ctt];
         //         cout << endl;
         //         ctt++;
         //     }
@@ -126,10 +106,10 @@ int main()
         //         int cx = cu.x + r[i][0];
         //         int cy = cu.y + r[i][1];
         //         int cti = cu.ti + 1;
-        //         if (cx > -1 && cx <= n && cy > -1 && cy <= m && !vis[cx][cy] && !map[cx][cy][cti] && !tmak[cx][cy][cti] && cu.e > 0)
+        //         if (cx > -1 && cx <= n && cy > -1 && cy <= m && !vis[cx][cy] && !map[cx][cy][cti] && !mrk[cx][cy][cti] && cu.e > 0)
         //         {
         //             Lo tmp = Lo(cx, cy, cu.e - 1, cti);
-        //             tmak[cx][cy][cti] = 1;
+        //             mrk[cx][cy][cti] = 1;
         //             qu.push(tmp);
         //         }
         //         vis[cx][cy] = 1;
@@ -137,14 +117,14 @@ int main()
         // }
         while (ctt < d)
         {
-            cout << ctt << ": map" << endl;
-            for (int i = 0; i <= n; ++i, cout << endl)
-                for (int j = 0; j <= m; ++j)
-                    cout << map[i][j][ctt];
+            // cout << ctt << ": map" << endl;
+            // for (int i = 0; i <= n; ++i, cout << endl)
+            //     for (int j = 0; j <= m; ++j)
+            //         cout << map[i][j][ctt];
             cout << ctt << "------mak------" << endl;
             for (int i = 0; i <= n; ++i, cout << endl)
                 for (int j = 0; j <= m; ++j)
-                    cout << tmak[i][j][ctt];
+                    cout << mrk[i][j][ctt];
             cout << endl;
             ctt++;
         }
