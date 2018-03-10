@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 const int INF = 0x3f3f3f3f;
-bool map[103][103][1003], mrk[103][103][1003], vis[110][110];
+bool map[103][103][1003], vis[110][110];
 struct Lo
 {
     int x, y, t;
@@ -25,7 +25,7 @@ int main()
     while (cin >> m >> n >> k >> d)
     {
         memset(map, false, sizeof(map));
-        memset(mrk, false, sizeof(mrk));
+        // memset(mrk, false, sizeof(mrk));
         memset(vis, 0, sizeof(vis));
         for (int i = 0; i < k; ++i)
         {
@@ -67,7 +67,7 @@ int main()
         }
         queue<Lo> qu;
         qu.push(Lo(0, 0, 0));
-        mrk[0][0][0] = true;
+        map[0][0][0] = true;
         int ans = INF;
         while (!qu.empty())
         {
@@ -86,24 +86,24 @@ int main()
                 int cx = cu.x + r[i][0];
                 int cy = cu.y + r[i][1];
                 int ct = cu.t + 1;
-                if (cx > -1 && cx <= n && cy > -1 && cy <= m && !vis[cx][cy] && !map[cx][cy][ct] && !mrk[cx][cy][ct])
+                if (cx > -1 && cx <= n && cy > -1 && cy <= m && !vis[cx][cy] && !map[cx][cy][ct])
                 {
                     Lo tmp = Lo(cx, cy, ct);
-                    mrk[cx][cy][ct] = true;
+                    map[cx][cy][ct] = true;
                     qu.push(tmp);
                 }
             }
         }
-        int ctt = 0;
-        while (ctt < d)
-        {
-            cout << ctt << "------mak------" << endl;
-            for (int i = 0; i <= n; ++i, cout << endl)
-                for (int j = 0; j <= m; ++j)
-                    cout << mrk[i][j][ctt];
-            cout << endl;
-            ctt++;
-        }
+        // int ctt = 0;
+        // while (ctt < d)
+        // {
+        //     cout << ctt << "------mak------" << endl;
+        //     for (int i = 0; i <= n; ++i, cout << endl)
+        //         for (int j = 0; j <= m; ++j)
+        //             cout << mrk[i][j][ctt];
+        //     cout << endl;
+        //     ctt++;
+        // }
 
         if (ans == INF)
             cout << "Bad luck!" << endl;
