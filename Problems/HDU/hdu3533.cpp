@@ -1,110 +1,104 @@
 #include <algorithm>
-#include <cstring>
+#include <array>
 #include <iostream>
 #include <queue>
 #include <vector>
 using namespace std;
 const int INF = 0x3f3f3f3f;
-bool map[103][103][1003], vis[110][110];
 struct Lo
 {
     int x, y, t;
     Lo() {}
     Lo(int x, int y, int t) : x(x), y(y), t(t) {}
 };
+struct Castle
+{
+    int c, t, v, x, y;
+};
 struct Bu
 {
     int x, y;
     Bu(int x, int y) : x(x), y(y) {}
 };
+array<array<array<bool, 1003>, 110>, 110> mrk;
+array<array<bool, 110>, 110> vis;
+array<Castle, 103> ca;
+int r[5][2] = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+int n, m, k, d;
+int bfs()
+{
+    queue<Lo> qu;
+    qu.push(Lo(0, 0, 0));
+    mrk[0][0][0] = true;
+    int ans = INF;
+    while (!qu.empty())
+    {
+        Lo cu = qu.front();
+        qu.pop();
+        if (d < cu.t)
+            continue;
+        if (cu.x == n && cu.y == m)
+            return cu.t;
+        for (int i = 0; i < 5; ++i)
+        {
+            int cx = cu.x + r[i][0];
+            int cy = cu.y + r[i][1];
+            int ct = cu.t + 1;
+            if (cx > -1 && cx <= n && cy > -1 && cy <= m && !vis[cx][cy] && !mrk[cx][cy][ct])
+            {
+                mrk[cx][cy][ct] = true;
+                qu.push(Lo(cx, cy, ct));
+            }
+        }
+    }
+    return ans;
+}
+void pre_set()
+{
+    for (int i = 0; i < k; i++)
+    {
+        for (int j = 0; j <= d; j += ca[i].t)
+        {
+            for (int k = 1;; k++)
+            {
+                int x = ca[i].x + r[ca[i].c][0] * k;
+                int y = ca[i].y + r[ca[i].c][1] * k;
+                if (x < 0 || x > n || y < 0 || y > m || vis[x][y])
+                    break;
+                if (k % ca[i].v == 0)
+                    mrk[x][y][j + k / ca[i].v] = true;
+            }
+        }
+    }
+}
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m, k, d;
-    while (cin >> m >> n >> k >> d)
+    while (cin >> n >> m >> k >> d)
     {
-        memset(map, false, sizeof(map));
-        // memset(mrk, false, sizeof(mrk));
-        memset(vis, 0, sizeof(vis));
+        for (auto &i : mrk)
+            for (auto &j : i)
+                j.fill(0);
+        for (auto &i : vis)
+            i.fill(0);
+
         for (int i = 0; i < k; ++i)
         {
             char c;
-            int t, v, x, y;
-            cin >> c >> t >> v >> x >> y;
-            vector<Bu> bs;
-            vis[x][y] = true;
-            int e = t;
-            for (int j = 0; j <= d; ++j)
-            {
-                for (std::size_t k = 0; k < bs.size(); ++k)
-                {
-                    if (c == 'N')
-                        bs[k].x -= v;
-                    if (c == 'S')
-                        bs[k].x += v;
-                    if (c == 'W')
-                        bs[k].y -= v;
-                    if (c == 'E')
-                        bs[k].y += v;
-                    if (bs[k].x > -1 && bs[k].y <= n && bs[k].y > -1 && bs[k].y <= m && !vis[bs[k].x][bs[k].y])
-                        map[bs[k].x][bs[k].y][j] = true;
-                }
-                if (++e < t)
-                    continue;
-                if (c == 'N' && (x - v < 0 || vis[x - v][y]))
-                    continue;
-                if (c == 'S' && (x + v > n || vis[x + v][y]))
-                    continue;
-                if (c == 'W' && (y - v < 0 || vis[x][y - v]))
-                    continue;
-                if (c == 'E' && (y + v > m || vis[x][y + v]))
-                    continue;
-                e = 0;
-                map[x][y][j] = true;
-                bs.push_back(Bu(x, y));
-            }
+            cin >> c >> ca[i].t >> ca[i].v >> ca[i].x >> ca[i].y;
+            if (c == 'N')
+                ca[i].c = 0;
+            if (c == 'S')
+                ca[i].c = 1;
+            if (c == 'E')
+                ca[i].c = 2;
+            if (c == 'W')
+                ca[i].c = 3;
+            vis[ca[i].x][ca[i].y] = 1;
         }
-        queue<Lo> qu;
-        qu.push(Lo(0, 0, 0));
-        map[0][0][0] = true;
-        int ans = INF;
-        while (!qu.empty())
-        {
-            Lo cu = qu.front();
-            qu.pop();
-            if (cu.x == n && cu.y == m)
-            {
-                ans = cu.t;
-                break;
-            }
-            if (n - cu.x + m - cu.y > d - cu.t)
-                continue;
-            int r[5][2] = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-            for (int i = 0; i < 5; ++i)
-            {
-                int cx = cu.x + r[i][0];
-                int cy = cu.y + r[i][1];
-                int ct = cu.t + 1;
-                if (cx > -1 && cx <= n && cy > -1 && cy <= m && !vis[cx][cy] && !map[cx][cy][ct])
-                {
-                    Lo tmp = Lo(cx, cy, ct);
-                    map[cx][cy][ct] = true;
-                    qu.push(tmp);
-                }
-            }
-        }
-        // int ctt = 0;
-        // while (ctt < d)
-        // {
-        //     cout << ctt << "------mak------" << endl;
-        //     for (int i = 0; i <= n; ++i, cout << endl)
-        //         for (int j = 0; j <= m; ++j)
-        //             cout << mrk[i][j][ctt];
-        //     cout << endl;
-        //     ctt++;
-        // }
-
+        pre_set();
+        int ans = bfs();
         if (ans == INF)
             cout << "Bad luck!" << endl;
         else
