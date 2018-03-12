@@ -28,7 +28,76 @@ bool reach(CUBE cu)
 }
 CUBE rotate(int idx, int dir, CUBE cu)
 {
-    
+    int tmp[3];
+    if (idx == 0)
+    {
+        if (dir == 1)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                tmp[i] = cu[4][i][0];
+                cu[4][i][0] = cu[3][3 - i][2];
+                cu[3][3 - i][2] = cu[5][i][0];
+                cu[5][i][0] = cu[1][i][0];
+                cu[1][i][0] = tmp[i];
+            }
+        }
+        else
+            for (int i = 0; i < 3; ++i)
+            {
+                tmp[i] = cu[1][i][0];
+                cu[1][i][0] = cu[5][i][0];
+                cu[5][i][0] = cu[3][3 - i][2];
+                cu[3][3 - i][2] = cu[4][i][0];
+                cu[4][i][0] = tmp[i];
+            }
+    }
+    if (idx == 1)
+    {
+        if (dir == 1)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                tmp[i] = cu[4][2][i];
+                cu[4][2][i] = cu[0][3 - i][2];
+                cu[0][i][2] = cu[5][0][i];
+                cu[5][0][3 - i] = cu[2][i][0];
+                cu[2][i][0] = tmp[i];
+            }
+        }
+        else
+            for (int i = 0; i < 3; ++i)
+            {
+                tmp[i] = cu[2][i][0];
+                cu[2][i][0] = cu[5][0][3 - i];
+                cu[5][0][i] = cu[0][i][2];
+                cu[0][3 - i][2] = cu[4][2][i];
+                cu[4][2][i] = tmp[i];
+            }
+    }
+    if (idx == 2)
+    {
+        if (dir == 1)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                tmp[i] = cu[4][2][3-i];
+                cu[4][2][3-i] = cu[0][3 - i][2];
+                cu[0][3 - i][2] = cu[5][0][i];
+                cu[5][0][3 - i] = cu[2][i][0];
+                cu[2][i][0] = tmp[i];
+            }
+        }
+        else
+            for (int i = 0; i < 3; ++i)
+            {
+                tmp[i] = cu[2][i][0];
+                cu[2][i][0] = cu[5][0][3 - i];
+                cu[5][0][i] = cu[0][i][2];
+                cu[0][3 - i][2] = cu[4][2][i];
+                cu[4][2][i] = tmp[i];
+            }
+    }
 }
 int main()
 {
