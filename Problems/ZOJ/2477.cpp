@@ -27,10 +27,11 @@ r r r g g g b b b o o o
 #include <array>
 #include <iostream>
 #include <vector>
+#include <stack>
 using namespace std;
 using CUBE = array<char, 54>;
 using PII = pair<int, int>;
-vector<PII> stp;
+stack<PII> stp;
 int ans = -1, clen;
 char cuid[6] = {'r', 'g', 'b', 'o', 'w', 'y'};
 int re[6][9] = {{9, 10, 11, 21, 22, 23, 33, 34, 35}, {12, 13, 14, 24, 25, 26, 36, 37, 38}, {15, 16, 17, 27, 28, 29, 39, 40, 41}, {18, 19, 20, 30, 31, 32, 42, 43, 44}, {0, 1, 2, 3, 4, 5, 6, 7, 8}, {45, 46, 47, 48, 49, 50, 51, 52, 53}};
@@ -41,7 +42,7 @@ int ocu[6][20] = {
     {8, 5, 2, 18, 30, 42, 53, 50, 47, 38, 26, 14, 15, 16, 17, 27, 29, 39, 40, 41},
     {2, 1, 0, 9, 21, 33, 51, 52, 53, 41, 29, 17, 18, 19, 20, 30, 32, 42, 43, 44},
     {20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 0, 1, 2, 3, 5, 6, 7, 8},
-    {33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 28, 50, 51, 52, 53}};
+    {33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53}};
 int ro[6][2][20] = {{{44, 32, 20, 0, 3, 6, 12, 24, 36, 45, 48, 51, 33, 21, 9, 34, 10, 35, 23, 11},
                      {12, 24, 36, 45, 48, 51, 44, 32, 20, 0, 3, 6, 11, 23, 35, 10, 34, 9, 21, 33}},
                     {{35, 23, 11, 6, 7, 8, 15, 27, 39, 47, 46, 45, 36, 24, 12, 37, 13, 38, 26, 14},
@@ -88,7 +89,7 @@ void dfs(int cd, CUBE cu)
             dfs(cd + 1, nc);
             if (ans != -1)
             {
-                stp.push_back(make_pair(i, j));
+                stp.push(make_pair(i, j));
                 return;
             }
         }
@@ -102,20 +103,21 @@ int main()
     cin >> T;
     while (T--)
     {
-        stp.clear();
         ans = -1;
         CUBE cu;
         clen = 1;
         for (auto &i : cu)
             cin >> i;
-        while (clen < 5)
+        while (clen < 6)
         {
             dfs(0, cu);
             clen++;
         }
         cout << ans << endl;
-        for (auto i : stp)
+        while(!stp.empty())
         {
+            auto &i = stp.top();
+            stp.pop();
             int t = i.second == 0 ? 1 : -1;
             cout << i.first << " " << t << endl;
         }
