@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define NUM 4
+#define NUM 8
 
 int queen[NUM][NUM] = {0};
 _Bool pin[3][2 * NUM];
