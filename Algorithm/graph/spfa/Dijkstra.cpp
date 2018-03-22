@@ -49,6 +49,21 @@ void dijkstra(G &gr, E &edg, int s)
         }
     }
 }
+/*
+//output path：
+void out(E &edg, int s, int t)
+{
+    int i = pth[t];
+    auto &e = edg[i];
+    int j = e.fr == t ? e.to : e.fr;
+    if (j != s)
+        out(edg, s, j);
+    else
+        cout << s;
+    cout << " " << t;
+}
+*/
+
 int main()
 {
     ios_base::sync_with_stdio(0);

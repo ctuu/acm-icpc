@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+#include <iomanip>
 int main()
 {
     int nuof, i, temp, j;
@@ -26,15 +27,7 @@ int main()
         {
             if (i == 1)
                 std::cout << " ";
-            if (temp < 10000)
-                std::cout << "0";
-            if (temp < 1000)
-                std::cout << "0";
-            if (temp < 100)
-                std::cout << "0";
-            if (temp < 10)
-                std::cout << "0";
-            std::cout << temp;
+            std::cout <<std::setw(5)<<std::setfill('0')<< temp;
             i = 1;
             judge[temp] = -1;
         }

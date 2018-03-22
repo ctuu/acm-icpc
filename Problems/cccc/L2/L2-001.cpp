@@ -1,33 +1,108 @@
-//Copyright 2017 Parallelc
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <array>
+#include <iostream>
+#include <queue>
+#include <vector>
 using namespace std;
-using LL = int64_t;
-using T =int;
-const T INF = 0x3f3f3f3f;
-struct edge {
-    int v, w;
-    bool operator < (const edge & e) const {return w > e.w;}
+const int N = 1e4 + 7;
+const int M = 1e5 + 7;
+const int INF = 0x3f3f3f3f;
+using G = vector<vector<int>>;
+array<int, N> d, phs;
+array<int, M> pth;
+struct Node
+{
+    int d, u;
+    Node(int d, int u) : d(d), u(u) {}
+    bool operator<(const Node &a) const { return d > a.d; }
 };
-vector<int> jy;
-vector<int> dp;
-vector<int> pre;
-void dfs(int k, int S)
+struct Edge
 {
-    if (pre[k] != -1)
-        dfs(pre[k], S);
-    if (k != S)
-        cout << k << " ";
-        else cout << k;
+    int fr, to, di;
+    Edge() = default;
+    Edge(int u, int v, int w) : fr(u), to(v), di(w) {}
+};
+using E = vector<Edge>;
+array<int, N> bd, res;
+int cnt;
+void dijkstra(G &gr, E &edg, int s)
+{
+    d.fill(INF);
+    d[s] = 0;
+    priority_queue<Node> pq;
+    pq.push(Node(0, s));
+    while (!pq.empty())
+    {
+        Node x = pq.top();
+        pq.pop();
+        int u = x.u;
+        if (d[u] < x.d)
+            continue;
+        for (auto i : gr[u])
+        {
+            Edge &e = edg[i];
+            int to = (e.fr == u) ? e.to : e.fr;
+            int b = d[u] + e.di;
+            int c = res[u] + bd[to];
+            if (d[to] == b)
+            {
+                // res[to] = max(res[to], res[u] + bd[to]);
+                if (res[to] < c)
+                {
+                    res[to] = c;
+                    pth[to] = i;
+                }
+                phs[to] += phs[u];
+            }
+            else if (d[to] > b)
+            {
+                phs[to] = phs[u];
+                pth[to] = i;
+                res[to] = c;
+                d[to] = b;
+                pq.push(Node(d[to], to));
+            }
+        }
+    }
 }
-T dij(const vector<vector<edge>> & lj, int S, int N)
+void out(E &edg, int s, int t)
 {
-    vector<int> us(lj.size()), ts(lj.size());
-    int n = lj.size() -1;
-    pre.resize(n + 1);
-    vector<int> a(n + 1, INF);
-    priority_queue<edge> q;
-    q.push({S, 0});
-    dp[S] = jy[S];
-    ts[S] = 1;
-    edge mini{0, 0};
+    int i = pth[t];
+    auto &e = edg[i];
+    int j = e.fr == t ? e.to : e.fr;
+    if (j != s)
+        out(edg, s, j);
+    else
+        cout << s;
+    cout << " " << t;
+}
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int n, m, s, t;
+    cin >> n >> m >> s >> t;
+    G gr;
+    E edg;
+    cnt = 1;
+    gr.resize(n + 10);
+    edg.resize(m + 10);
+    res.fill(0);
+    phs.fill(0);
+    for (int i = 0; i < n; ++i)
+        cin >> bd[i];
+    for (int i = 0; i < m; ++i)
+    {
+        int fr, to, di;
+        cin >> fr >> to >> di;
+        edg[i] = Edge(fr, to, di);
+        gr[fr].push_back(i);
+        gr[to].push_back(i);
+    }
+    res[s] = bd[s];
+    phs[s] = 1;
+    dijkstra(gr, edg, s);
+    cout << phs[t] << " " << res[t] << endl;
+    out(edg, s, t);
+    return 0;
 }
