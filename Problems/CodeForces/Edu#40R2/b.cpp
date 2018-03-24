@@ -14,15 +14,10 @@ int main()
     int mct = 0;
     for (int i = 1; i < n; ++i)
     {
-        int ct = 0;
-        for (int j = i; j < n; ++j)
-        {
-            if (s[j] == s[j - i] && j < 2 * i)
-                ct++;
-            else
-                break;
-        }
-        mct = max(ct, mct);
+        auto ta = s.substr(0, i);
+        auto tb = s.substr(i, i);
+        if (ta == tb)
+            mct = i;
     }
     if (mct != 0)
         mct--;

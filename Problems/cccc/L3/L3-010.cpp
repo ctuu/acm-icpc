@@ -45,14 +45,9 @@ int main()
         add(t, root);
     }
     int fl = 0;
-    for (auto i : tree)
-    {
-        int k = i.second.first == -1 ? 0 : 1;
-        k = i.second.second == -1 ? k : k + 1;
-        if (k % 2 != 0)
-            fl = 1;
-    }
     queue<int> qu;
+    vector<int> ar;
+    ar.push_back(root);
     cout << root;
     int a = tree[root].first;
     int b = tree[root].second;
@@ -64,6 +59,7 @@ int main()
     {
         int cu = qu.front();
         qu.pop();
+        ar.push_back(cu);
         cout << " " << cu;
         a = tree[cu].first;
         b = tree[cu].second;
@@ -71,6 +67,14 @@ int main()
             qu.push(a);
         if (b != -1)
             qu.push(b);
+    }
+    for (int i = 1; i < n; ++i)
+    {
+        if (ar[i] < ar[(i + 1) / 2 - 1])
+            fl = 1;
+        ++i;
+        if (i < n && ar[i] > ar[(i + 1) / 2 - 1])
+            fl = 1;
     }
     cout << endl;
     if (fl)

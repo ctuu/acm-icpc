@@ -68,7 +68,7 @@ int main()
     if (!calc(ty))
     {
         y = ty;
-        x = max(xx, ty);
+        x = 1000000000;
         cout << "YES" << endl;
         cout << x << " " << y << endl;
     }
