@@ -8,7 +8,6 @@
 #include <vector>
 using namespace std;
 #define MP(a, b) make_pair(a, b)
-const int N = 103;
 using PII = pair<int, int>;
 map<int, PII> tree;
 map<int, int> le;
