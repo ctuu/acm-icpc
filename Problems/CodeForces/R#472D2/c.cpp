@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -15,29 +16,18 @@ int main()
     int n, u;
     cin >> n >> u;
     double mef = -1.0;
-    int idx = 0;
     for (int i = 0; i < n; ++i)
-    {
         cin >> ar[i];
-    }
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n - 2; ++i)
     {
-        int idx = 0;
-        while (u < ar[i] - ar[idx])
-            ++idx;
-        if (idx + 1 >= i)
-            continue;
-        mef = max(mef, calc(ar[idx], ar[idx + 1], ar[i]));
-        while (idx + 2 < i)
-        {
-            double b = calc(ar[idx + 1], ar[idx + 2], ar[i]);
-            mef = max(mef, b));
-            idx++;
-        }
+        int k = upper_bound(ar.begin(), ar.begin() + n, ar[i] + u) - ar.begin();
+        k--;
+        if (k >= 0 && k < n && i + 1 < k && ar[k] - ar[i] <= u)
+            mef = max(mef, calc(ar[i], ar[i + 1], ar[k]));
     }
     if (mef < 0)
         cout << "-1" << endl;
     else
-        cout << mef << endl;
+        cout << fixed << setprecision(10) << mef << endl;
     return 0;
 }

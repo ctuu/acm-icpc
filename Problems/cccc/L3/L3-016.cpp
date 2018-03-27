@@ -10,21 +10,23 @@ using namespace std;
 #define MP(a, b) make_pair(a, b)
 using PII = pair<int, int>;
 map<int, PII> tree;
-map<int, int> le;
-map<int, int> fa;
+// array<int, N> ar;
+map<int, int> ids;
+map<int, int> ar;
+set<int> node;
 void add(int c, int r)
 {
-    tree[c] = MP(-1, -1);
-    if (c < r)
+    tree[c] = MP(-1,-1);
+    if(c < r)
     {
-        if (tree[r].first == -1)
+        if(tree[r].first == -1)
             tree[r].first = c;
         else
             add(c, tree[r].first);
-    }
+    }   
     else
     {
-        if (tree[r].second == -1)
+        if(tree[r].second == -1)
             tree[r].second = c;
         else
             add(c, tree[r].second);
@@ -34,90 +36,105 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, m, root;
-    set<int> ext;
+    int n, root;
     cin >> n >> root;
-    fa[root] = -1;
-    le[root] = 0;
+    node.insert(root);
     tree[root] = MP(-1, -1);
-    ext.insert(root);
     for (int i = 1; i < n; ++i)
     {
-        int c;
-        cin >> c;
-        ext.insert(c);
-        add(c, root);
+        int t;
+        cin >> t;
+        node.insert(t);
+        add(t, root);
     }
+    ar[root] = 0;
+    ids[root] = 0;
     queue<PII> qu;
     qu.push(MP(root, 0));
     while (!qu.empty())
     {
-        auto cp = qu.front();
+        auto cu = qu.front();
+        int id = cu.second;
         qu.pop();
-        int cn = cp.first;
-        int cl = cp.second;
-        int lch = tree[cn].first;
-        int rch = tree[cn].second;
-        if (lch != -1)
+        int l = tree[cu.first].first;
+        int r = tree[cu.first].second;
+        int lid = 2 * id + 1;
+        int rid = 2 * id + 2;
+        if (l != -1)
         {
-            le[lch] = cl + 1;
-            fa[lch] = cn;
-            qu.push(MP(lch, cl + 1));
+            ar[l] = ar[cu.first] + 1;
+            ids[l] = lid;
+            qu.push(MP(l, lid));
         }
-        if (rch != -1)
+        if (r != -1)
         {
-            le[rch] = cl + 1;
-            fa[rch] = cn;
-            qu.push(MP(rch, cl + 1));
+            ar[r] = ar[cu.first] + 1;
+            ids[r] = rid;
+            qu.push(MP(r, rid));
         }
     }
-    // for(auto i: ext)
-    //     cout << i <<" " << fa[i] << " " << le[i] << endl;
+    int m;
     cin >> m;
-    string slen;
     for (int i = 0; i < m; ++i)
     {
-        int a;
-        cin >> a;
-        bool fl = 1;
-        getline(cin, slen);
-        stringstream sin(slen);
+        int a, b;
+        bool fl = 0;
+        string ts;
         vector<string> vec;
-        while (sin >> slen)
-            vec.push_back(slen);
+        cin >> a;
+        getline(cin, ts);
+        stringstream ssin(ts);
+        while (ssin >> ts)
+            vec.push_back(ts);
         // for(auto i: vec)
-        //     cout << i << endl;
-        if (vec[2] == "root" && a == root)
-            fl = 0;
+        //     cout << i <<" ";
+        // cout << endl;
+        if (node.count(a) == 0)
+            fl = 1;
+        else if (vec[2] == "root")
+        {
+            if (a != root)
+                fl = 1;
+        }
         else if (vec[3] == "siblings")
         {
-            int b = stoi(vec[1]);
-            if (ext.count(a) && ext.count(b) && fa[a] == fa[b])
-                fl = 0;
+            b = stoi(vec[1]);
+            if (node.count(b) == 0)
+                fl = 1;
+            else if ((ids[a] + 1) / 2 != (ids[b] + 1) / 2)
+                fl = 1;
         }
         else if (vec[2] == "parent")
         {
-            int b = stoi(vec[4]);
-            if (ext.count(a) && ext.count(b) && fa[b] == a)
-                fl = 0;
+            b = stoi(vec[4]);
+            if (node.count(b) == 0)
+                fl = 1;
+            else if ((ids[b] + 1) / 2 - 1 != ids[a])
+                fl = 1;
         }
         else if (vec[2] == "left")
         {
-            int b = stoi(vec[5]);
-            if (ext.count(a) && ext.count(b) && tree[b].first == a)
-                fl = 0;
+            b = stoi(vec[5]);
+            if (node.count(b) == 0)
+                fl = 1;
+            else if (tree[b].first != a)
+                fl = 1;
         }
         else if (vec[2] == "right")
         {
-            int b = stoi(vec[5]);
-            if (ext.count(a) && ext.count(b) && tree[b].second == a)
-                fl = 0;
+            b = stoi(vec[5]);
+            if (node.count(b) == 0)
+                fl = 1;
+            else if (tree[b].second != a)
+                fl = 1;
         }
-        else
+        else if (vec[3] == "on")
         {
-            int b = stoi(vec[1]);
-            if (ext.count(a) && ext.count(b) && le[a] == le[b])
-                fl = 0;
+            b = stoi(vec[1]);
+            if (node.count(b) == 0)
+                fl = 1;
+            else if (ar[a] != ar[b])
+                fl = 1;
         }
         if (fl)
             cout << "No" << endl;
