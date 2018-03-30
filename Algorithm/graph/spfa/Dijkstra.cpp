@@ -50,7 +50,7 @@ void dijkstra(G &gr, E &edg, int s)
     }
 }
 /*
-//output path
+//output path1
 void out(E &edg, int s, int t)
 {
     int i = pth[t];
