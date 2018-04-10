@@ -13,13 +13,13 @@ struct Edge
     Edge() = default;
     Edge(int u, int v, int c) : u(u), v(v), c(c) {}
 };
-using G = pair<vector<Edge>, int>;
+using G = vector<Edge>;
 int mst(G &gr)
 {
     for (int i = 0; i < N; ++i)
         p[i] = i;
     int sum = 0, ct = 0;
-    vector<Edge> pa = gr.first;
+    vector<Edge> pa = gr;
     sort(pa.begin(), pa.end(), [](Edge &a, Edge &b) { return a.c < b.c; });
     for (auto e : pa)
     {
@@ -40,11 +40,10 @@ int main()
     int n, m, u, v, c;
     cin >> n >> m;
     G gr;
-    gr.second = n;
     for (int i = 0; i < m; ++i)
     {
         cin >> u >> v >> c;
-        gr.first.push_back(Edge(u, v, c));
+        gr.push_back(Edge(u, v, c));
     }
     int ans = mst(gr);
     cout << ans << endl;

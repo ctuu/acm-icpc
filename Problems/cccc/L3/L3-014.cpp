@@ -5,10 +5,11 @@
 #include <queue>
 #include <vector>
 using namespace std;
-const int N = 1e5 + 7;
+const int N = 1e4 + 7;
 const int M = 1e5 + 7;
 const int INF = 0x3f3f3f3f;
 array<int, N> d, hc;
+array<bool, N> vis;
 array<int, M> pth;
 struct Node
 {
@@ -27,6 +28,7 @@ void dijk(G &gr, E &edg, int s)
     d.fill(INF);
     d[s] = 0;
     hc.fill(INF);
+    vis.fill(0);
     hc[0] = 0;
     priority_queue<Node> pq;
     pq.push(Node{0, s, INF});
@@ -35,6 +37,9 @@ void dijk(G &gr, E &edg, int s)
         auto x = pq.top();
         pq.pop();
         int u = x.u;
+        if (vis[u] == 1)
+            continue;
+        vis[u] = 1;
         if (d[u] < x.d)
             continue;
         for (auto i : gr[u])
@@ -60,26 +65,31 @@ void dijk(G &gr, E &edg, int s)
         }
     }
 }
+
+vector<Edge> troad;
 void out(E &edg, int s, int t, int id)
 {
-    int i = pth[s];
+    int i = pth[t];
     auto &e = edg[i];
-    int j = e.fr == s ? e.to : e.fr;
-    if (id != e.id)
+    int j = e.fr == t ? e.to : e.fr;
+    if (j != s)
+        out(edg, s, j, e.id);
+    troad.push_back(Edge{j, t, 0, e.id});
+}
+void merge(vector<Edge> &edg)
+{
+    int idx = 0;
+    for (int i = 1; i < edg.size(); ++i)
     {
-        cout << setw(4) << setfill('0') << s << "." << endl;
-        cout << "Go by the line of company #" << e.id << " from ";
-        cout << setw(4) << setfill('0') << s << " to ";
+        if (edg[idx].id == edg[i].id)
+        {
+            edg[idx].to = edg[i].to;
+            edg.erase(edg.begin() + i);
+            i--;
+        }
+        else
+            idx = i;
     }
-    if (j != t)
-        out(edg, j, t, e.id);
-    else
-        cout << setw(4) << setfill('0') << t << "." << endl;
-    // if (j != s)
-    //     out(edg, s, j, e.id);
-    // else
-    //     cout << s;
-    // cout << " " << t;
 }
 int main()
 {
@@ -89,17 +99,16 @@ int main()
     cin >> n;
     G gr;
     E edg;
+    edg.resize(M);
     gr.resize(N);
-    for (int i = 0; i < n; ++i)   
+    for (int i = 0; i < n; ++i)
     {
         int m, c, ne;
-        cin >> m;
-        if (m)
-            cin >> c;
+        cin >> m >> c;
         for (int j = 1; j < m; ++j)
         {
             cin >> ne;
-            edg.push_back(Edge{c, ne, 1, i + 1});
+            edg[sm] = Edge{c, ne, 1, i + 1};
             gr[c].push_back(sm);
             gr[ne].push_back(sm);
             sm++;
@@ -108,32 +117,22 @@ int main()
     }
     int k, u, v;
     cin >> k;
-    for (int i = 0; i < k; ++i)
+    while (k--)
     {
         cin >> u >> v;
-        dijk(gr, edg, v);
-        if (d[u] == INF)
-            cout << "Sorry, no line is available." << endl;
-        else
+        dijk(gr, edg, u);
+        if (d[v] == INF)
         {
-            if (u != v)
-            {
-                cout << d[u] << endl;
-                int i = pth[u];
-                auto &e = edg[i];
-                cout << "Go by the line of company #" << e.id << " from ";
-                cout << setw(4) << setfill('0') << u << " to ";
-                int j = e.fr == u ? e.to : e.fr;
-                if (j != v)
-                    out(edg, j, v, e.id);
-                else
-                    cout << setw(4) << setfill('0') << v << "." << endl;
-            }
-            else
-            {
-                cout << 0 << endl
-                     << "Go by the line of company #" << 0 << " from " << setw(4) << setfill('0') << u << " to " << setw(4) << setfill('0') << v << "." << endl;
-            }
+            cout << "Sorry, no line is available." << endl;
+            continue;
+        }
+        troad.clear();
+        out(edg, u, v, INF);
+        merge(troad);
+        cout << d[v] << endl;
+        for (auto i : troad)
+        {
+            cout << "Go by the line of company #" << i.id << " from " << setw(4) << setfill('0') << i.fr << " to " << setw(4) << setfill('0') << i.to << "." << endl;
         }
     }
     return 0;
