@@ -14,6 +14,6 @@ int main()
     for(int i = 1; i < M; ++i)
         for(int j = 1; j < N; ++j)
             com[j][i] = com[j-1][i-1] + com[j][i-1];
-    cout << com[2][4] << endl;
+    cout << com[4][3] << endl;
     return 0;
 }
