@@ -8,8 +8,7 @@ public class Main {
             dp[i] = BigInteger.ZERO;
         dp[0] = BigInteger.ONE;
         dp[1] = BigInteger.ONE;
-        dp[2] = new BigInteger("2");
-        for(int i = 3; i < 103; ++i)
+        for(int i = 2; i < 103; ++i)
             for(int j = 0; j < i; ++j)
                 dp[i] = dp[i].add(dp[j].multiply(dp[i-j-1]));
         Scanner cin = new Scanner(System.in);
