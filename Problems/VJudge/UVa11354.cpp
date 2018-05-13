@@ -6,7 +6,6 @@
 using namespace std;
 const int N = 1e5 + 7;
 array<int, N> p, sx, d, val;
-array<bool, N> vis;
 int find(int x) { return p[x] == x ? x : find(p[x]); }
 struct Edge
 {
@@ -16,7 +15,7 @@ using G = vector<Edge>;
 
 void mst(G &gr)
 {
-    sx.fill(1);
+    sx.fill(0);
     d.fill(0);
     for (int i = 0; i < N; ++i)
         p[i] = i;
@@ -27,15 +26,18 @@ void mst(G &gr)
         int u = find(e.u), v = find(e.v);
         if (u == v)
             continue;
-        if (sx[u] >= sx[v])
+        if (sx[u] < sx[v])
         {
-            swap(u, v);
-            swap(e.u, e.v);
+            p[u] = v;
+            d[u] = e.c;
         }
-        cout << u <<" " << e.c << endl;
-        d[e.u] = e.c;
-        p[u] = v;
-        sx[v] += sx[u];
+        else
+        {
+            p[v] = u;
+            d[v] = e.c;
+            if (sx[u] == sx[v])
+                sx[u]++;
+        }
     }
 }
 
@@ -44,8 +46,12 @@ int main()
     ios::sync_with_stdio(0);
     cin.tie(0);
     int n, m, u, v, c, q;
+    int wtf = 0;
     while (cin >> n >> m)
     {
+        if (wtf)
+            cout << endl;
+        wtf = 1;
         G gr;
         for (int i = 0; i < m; ++i)
         {
@@ -53,32 +59,33 @@ int main()
             gr.push_back({u, v, c});
         }
         mst(gr);
-        cout << endl;
-        for(int i = 1; i<= n; ++i)
-            cout << i <<" " << p[i] <<" " << d[i] << endl;
-        cout << endl;
+        val.fill(-1);
         cin >> q;
         while (q--)
         {
-            vis.fill(0);
-            val.fill(0);
             cin >> u >> v;
-            vis[u] = 1;
-            while (p[u] != u)
+            int cr = u;
+            val[u] = 0;
+            while (u != p[u])
             {
-                val[p[u]] = max(d[u], val[u]);
+                val[p[u]] = max(val[u], d[u]);
                 u = p[u];
-                vis[u] = 1;
             }
-            while(!vis[v])
+            int mx = -1;
+            while (val[v] < 0 && v != p[v])
             {
-                vis[v] = 1;
-                val[p[v]] = max(d[v], val[v]);
+                mx = max(mx, d[v]);
                 v = p[v];
             }
-            cout << val[v] << endl;
+            cout << max(mx, val[v]) << endl;
+            u = cr;
+            val[u] = -1;
+            while (u != p[u])
+            {
+                val[p[u]] = -1;
+                u = p[u];
+            }
         }
-        cout << endl;
     }
     return 0;
 }
