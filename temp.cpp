@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 int array[5000+1];
 int d[5000+1];
@@ -71,5 +72,13 @@ int main()
         ++i;
     }
     lds(nArrayLen);
+=======
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "Hello World" << endl;
+>>>>>>> 4c80a45248cefeb8b896162ad4ffd9758c589097
     return 0;
 }
