@@ -2,22 +2,41 @@
 #include <algorithm>
 #include <vector>
 using namespace std;
+
+using PII = pair<int, int>;
+
 int main()
 {
-    int n, k;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int n, k, t;
     cin >> n >> k;
-    vector<int> v;
-    v.resize(n);
-    for(auto &i: v)
-        cin >> i;
-    sort(v.begin(), v.end());
-    int gr = n / k;
-    int sum = 0;
-    for(auto i = v.rbegin(); i < v.rbegin() + k; ++i)
-        sum += *i;
-    cout << sum << endl;
-    for(int i = 0; i < k - 1; ++i)
-        cout << gr << " ";
-    cout << n - gr * (k - 1)<< endl;
+    vector<PII> v;
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> t;
+        v.push_back({t, i + 1});
+    }
+    sort(v.begin(), v.end(), greater<PII>());
+    vector<int> res;
+    int ans = 0;
+    for (int i = 0; i < k; ++i)
+    {
+        ans += v[i].first;
+        res.push_back(v[i].second);
+    }
+    cout << ans << endl;
+    sort(res.begin(), res.end());
+    if (k > 1)
+    {
+        cout << res[0] << " ";
+        for (int i = 1; i < k - 1; ++i)
+        {
+            cout << res[i] - res[i - 1] << " ";
+        }
+        cout << n - res[k - 2];
+    }
+    else
+        cout << n << endl;
     return 0;
 }
