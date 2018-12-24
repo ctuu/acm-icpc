@@ -1,100 +1,69 @@
-#include <map>
-#include <stack>
 #include <iostream>
 #include <array>
 #include <vector>
 using namespace std;
-using E = vector<vector<int>>;
 const int N = 3e5 + 7;
-const long long MOD = 998244353;
-array<int, N> p;
-int find(int x)
-{
-    return p[x] = p[x] == x ? x : p[x] = find(p[x]);
-}
-void joint(int a, int b)
-{
-    int i = find(a), j = find(b);
-    p[i] = j;
-}
+const int MOD = 998244353;
+using E = array<vector<int>, N>;
+int le, ri;
+long long ans;
+array<int, N> vis;
 array<vector<int>, N> edg;
+void dfs(int x)
+{
+    le = vis[x] > 0 ? le + 1 : le;
+    ri = vis[x] < 0 ? ri + 1 : ri;
+    for (auto i : edg[x])
+    {
+        if (vis[i] == vis[x])
+        {
+            ans = 0;
+            return;
+        }
+        else if (vis[i] == 0)
+        {
+            vis[i] = -vis[x];
+            dfs(i);
+        }
+    }
+}
 int main()
 {
     ios::sync_with_stdio(0);
     cin.tie(0);
-    cout.tie(0);
-    int t;
+    vis.fill(0);
+    int t, offset = 0;
     cin >> t;
-    int ofs = 0;
-    array<int, N> tg;
-    tg.fill(0);
-    for (int i = 0; i <= N; ++i)
-        p[i] = i;
     while (t--)
     {
         int n, m;
+        ans = 1;
         cin >> n >> m;
-        n += ofs;
         for (int i = 0; i < m; ++i)
         {
             int a, b;
             cin >> a >> b;
-            a += ofs;
-            b += ofs;
+            a += offset;
+            b += offset;
             edg[a].push_back(b);
             edg[b].push_back(a);
-            joint(a, b);
         }
-        map<int, vector<int>> mp;
-        for (int i = ofs + 1; i <= n; ++i)
-            mp[find(i)].push_back(i);
-        long long res = 1;
-
-        stack<int> stk;
-        for (auto g : mp)
+        for (int i = 1 + offset; i <= n + offset; ++i)
         {
-            bool fl = 0;
-            for (auto a : g.second)
-                stk.push(a);
-            tg[stk.top()] = 1;
-            while (!stk.empty() && !fl)
-            {
-                int a = stk.top();
-                stk.pop();
-                for (auto i : edg[a])
-                {
-                    if (find(i) != find(a))
-                        continue;
-                    if (tg[i] == 0)
-                        stk.push(i);
-                    if (tg[i] != tg[a])
-                        tg[i] = -tg[a];
-                    else
-                    {
-                        fl = 1;
-                        break;
-                    }
-                }
-            }
-            if (fl)
-            {
-                res = 0;
-                break;
-            }
-            long long l = 0, ts = 1;
-            for (auto i : g.second)
-                l = tg[i] == 1 ? l + 1 : l;
-            long long r = g.second.size() - l;
-            while (l--)
-                ts = (ts << 1) % MOD;
-            long long rts = 1;
-            while (r--)
-                rts = (rts << 1) % MOD;
-            rts = (ts + rts) % MOD;
-            res = (rts * res) % MOD;
+            if (vis[i])
+                continue;
+            le = ri = 0;
+            long long tl = 1, tr = 1;
+            vis[i] = 1;
+            dfs(i);
+            while (le--)
+                tl = (tl << 1) % MOD;
+            while (ri--)
+                tr = (tr << 1) % MOD;
+            ans = (ans * (tl + tr) % MOD) % MOD;
         }
-        ofs = n;
-        cout << res << endl;
+        cout << ans << '\n';
+        offset += n;
     }
     return 0;
 }
